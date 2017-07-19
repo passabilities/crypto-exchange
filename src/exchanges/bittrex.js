@@ -10,12 +10,35 @@ bittrex.options({
 })
 
 /**
- * NOTE: When dealing with pairs, they must be flipped before returned.
+ * NOTE: Bittrex API returns pairs in "quote-base" order.
  */
 
 class Bittrex {
 
   // Public Methods
+
+  ticker(pair) {
+    pair = Pair.flip(pair).replace('_','-')
+    return new Promise((resolve, reject) => {
+      bittrex.getmarketsummary({ market: pair },
+        (response) => {
+          if(response.success) {
+            let { Last, Ask, Bid, High, Low, Volume, TimeStamp } = response.result[0]
+            resolve({
+              last: Last,
+              ask: Ask,
+              bid: Bid,
+              high: High,
+              low: Low,
+              volume: Volume,
+              timestamp: new Date(TimeStamp).getTime()
+            })
+          } else {
+            reject(response.message)
+          }
+        })
+    })
+  }
 
   assets() {
     return new Promise((resolve, reject) => {

@@ -14,6 +14,30 @@ class Yunbi {
 
   // Public Methods
 
+  ticker(pair) {
+    pair = pair.replace('_','').toLowerCase()
+
+    return new Promise((resolve, reject) => {
+      yunbi.getTicker(pair,
+        (err, ticker) => {
+          if(err) {
+            reject(err)
+          } else {
+            let { ticker: { last, buy, sell, high, low, vol }, at } = ticker
+            resolve({
+              last: parseFloat(last),
+              ask: parseFloat(buy),
+              bid: parseFloat(sell),
+              high: parseFloat(high),
+              low: parseFloat(low),
+              volume: parseFloat(vol),
+              timestamp: new Date(at * 1000).getTime()
+            })
+          }
+        })
+    })
+  }
+
   assets() {
     return new Promise((resolve, reject) => {
       this.pairs()

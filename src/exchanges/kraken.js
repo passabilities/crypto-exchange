@@ -7,12 +7,37 @@ const { key, secret } = require('../getKeys')('kraken')
 const kraken = new Api(key, secret)
 
 /**
- * NOTE: Kraken API returns pairs with no separator and deals with alt-names for assets.
+ * NOTE: Kraken API returns pairs in "basequote" order and deals with alt names.
  */
 
 class Kraken {
 
   // Public Methods
+
+  ticker(pair) {
+    pair = _.reduce(Kraken.alts, (value, sym, alt) => value.replace(sym, alt), pair)
+    pair = pair.replace('_','')
+
+    return new Promise((resolve, reject) => {
+      kraken.api('Ticker', { pair },
+        (err, data) => {
+          if(err) {
+            reject(err.message)
+          } else {
+            let { c: [last], a: [ask], b: [bid], h: [high], l: [low], v: [volume] } = _.values(data.result)[0]
+            resolve({
+              last: parseFloat(last),
+              ask: parseFloat(ask),
+              bid: parseFloat(bid),
+              high: parseFloat(high),
+              low: parseFloat(low),
+              volume: parseFloat(volume),
+              timestamp: Date.now()
+            })
+          }
+        })
+    })
+  }
 
   assets() {
     return new Promise((resolve, reject) => {

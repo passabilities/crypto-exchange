@@ -32,6 +32,33 @@ bittrex.pairs()
 
 ## Public Methods
 
+### ticker
+
+Return current ticker information for a given pair on an exchange.
+
+```javascript
+  ticker(pair) {
+  }
+```
+
+##### Arguments
+
+* `pair` string - Pair to get tickr information for.
+
+##### Response
+
+```javascript
+  {
+    last: 2336.00001284,
+    ask: 2337.9,
+    bid: 2337,
+    high: 2380,
+    low: 2133,
+    volume: 6597.97852916,
+    timestamp: 1500461237647 // in milliseconds
+  }
+```
+
 ### assets
 
 Returns the available assets on an exchange. If the asset is disabled/frozen, it is not included.

@@ -14,8 +14,29 @@ class Poloniex {
 
   // Public Methods
 
+  ticker(pair) {
+    pair = Pair.flip(pair)
+
+    return new Promise((resolve, reject) => {
+      plnx.returnTicker()
+        .then( tickers => {
+          let { last, lowestAsk, highestBid, high24hr, low24hr, quoteVolume } = tickers[pair]
+          resolve({
+            last: parseFloat(last),
+            ask: parseFloat(lowestAsk),
+            bid: parseFloat(highestBid),
+            high: parseFloat(high24hr),
+            low: parseFloat(low24hr),
+            volume: parseFloat(quoteVolume),
+            timestamp: Date.now()
+          })
+        })
+        .catch(err => reject(err.message))
+    })
+  }
+
   assets() {
-     return new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       plnx.returnCurrencies()
         .then( currencies => {
           currencies = _.reduce(currencies, (result, data, sym) => (
@@ -24,7 +45,7 @@ class Poloniex {
           resolve(currencies)
         })
         .catch(err => reject(err.message))
-     })
+    })
   }
 
   pairs() {

@@ -5,12 +5,36 @@ const { key, secret, passphrase } = require('../getKeys')('gdax')
 const gdax = new Api.AuthenticatedClient(key, secret, passphrase)
 
 /**
- * NOTE: GDAX API returns pairs in base-quote order.
+ * NOTE: GDAX API returns pairs in "base-quote" order.
  */
 
 class GDAX {
 
   // Public Methods
+
+  ticker(pair) {
+    pair = pair.replace('_','-')
+    return new Promise((resolve, reject) => {
+      let client = new Api.PublicClient(pair)
+      client.getProductTicker(
+        (err, response, data) => {
+          if(err) {
+            reject(err.message)
+          } else {
+            let { price, ask, bid, volume, time } = data
+            resolve({
+              last: parseFloat(price),
+              ask: parseFloat(ask),
+              bid: parseFloat(bid),
+              high: 'N/A',
+              low: 'N/A',
+              volume: parseFloat(volume),
+              timestamp: new Date(time).getTime()
+            })
+          }
+        })
+    })
+  }
 
   assets() {
     return new Promise((resolve, reject) => {
