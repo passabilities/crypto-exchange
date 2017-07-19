@@ -9,6 +9,7 @@ The purpose of this project is to bring together a bunch of cryptocurrency marke
 * GDAX
 * Kraken
 * Poloniex
+* Yunbi
 
 ## Usage
 
