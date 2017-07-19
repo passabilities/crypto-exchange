@@ -1,0 +1,31 @@
+{
+  "name": "crypto-exchange",
+  "version": "1.0.0",
+  "description": "Pulls together list of crypto exchanges to interact with their API's in a uniform fashion.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/passabilities/crypto-exchange.git"
+  },
+  "keywords": [
+    "crypto",
+    "exchange",
+    "api",
+    "bitcoin",
+    "altcoin",
+    "library"
+  ],
+  "author": "Noah Passalacqua",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/passabilities/crypto-exchange/issues"
+  },
+  "homepage": "https://github.com/passabilities/crypto-exchange#readme",
+  "dependencies": {
+    "lodash": "^4.17.4",
+    "node.bittrex.api": "^0.3.3"
+  }
+}
