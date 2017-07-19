@@ -116,12 +116,12 @@ class Kraken {
     })
   }
 
-  depth(pair) {
+  depth(pair, count=50) {
     pair = _.reduce(Kraken.alts, (value, sym, alt) => value.replace(sym, alt), pair)
     pair = pair.replace('_','')
 
     return new Promise((resolve, reject) => {
-      kraken.api('Depth', { pair },
+      kraken.api('Depth', { pair, count },
         (err, response) => {
           if(err) {
             reject(err)

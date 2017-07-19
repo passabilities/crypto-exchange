@@ -71,10 +71,10 @@ class Bittrex {
     })
   }
 
-  orderbook(pair, depth=20) {
+  depth(pair, count=50) {
     pair = Pair.flip(pair).replace('_','-')
     return new Promise((resolve, reject) => {
-      bittrex.getorderbook({ market: pair, type: 'both', depth },
+      bittrex.getorderbook({ market: pair, type: 'both', depth: count },
         (response) => {
           if(response.success) {
             let depth = response.result

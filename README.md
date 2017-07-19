@@ -77,12 +77,12 @@ Returns the available pairs on an exchange.
   ]
 ```
 
-### orderbook
+### depth
 
-Returns the order book of the buy and sell orders.
+Returns the depth of available buy and sell orders.
 
 ```javascript
-  orderbook(pair[, depth = 20]) {
+  depth(pair[, count = 50]) {
   }
 ```
 

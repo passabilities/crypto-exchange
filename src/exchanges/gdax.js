@@ -66,7 +66,7 @@ class GDAX {
     })
   }
 
-  depth(pair) {
+  depth(pair, count=50) {
     pair = pair.replace('_','-')
     return new Promise((resolve, reject) => {
       let args = {
@@ -77,7 +77,10 @@ class GDAX {
           if(err) {
             reject(err)
           } else {
-            let depth = { buy: data.bids, sell: data.asks }
+            let depth = {
+              buy: data.bids.splice(0, count),
+              sell: data.asks.splice(0, count)
+            }
             _.each(depth, (entries, type) => {
               depth[type] = _.map(entries, entry => _.map(entry.splice(0,2), parseFloat))
             })

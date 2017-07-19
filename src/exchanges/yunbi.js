@@ -81,23 +81,20 @@ class Yunbi {
     }).catch(console.log)
   }
 
-  depth(pair) {
+  depth(pair, count=50) {
     pair = pair.replace('_','').toLowerCase()
     return new Promise((resolve, reject) => {
-      yunbi.getOrderBook(pair, null,
+      yunbi.getDepth(pair, null,
         (err, depth) => {
           if(err) {
             reject(err)
           } else {
-            depth = { buy: depth.bids, sell: depth.asks }
+            depth = {
+              buy: depth.bids.splice(0, count),
+              sell: depth.asks.splice(0, count)
+            }
             _.each(depth, (entries, type) => {
-              depth[type] = _.map(entries, entry => {
-                let { price, volume } = entry
-                return [
-                  parseFloat(price),
-                  parseFloat(volume)
-                ]
-              })
+              depth[type] = _.map(entries, entry => _.map(entry, parseFloat))
             })
             resolve(depth)
           }

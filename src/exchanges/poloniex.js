@@ -66,10 +66,10 @@ class Poloniex {
     })
   }
 
-  depth(pair) {
+  depth(pair, count=50) {
     pair = Pair.flip(pair)
     return new Promise((resolve, reject) => {
-      plnx.returnOrderBook(pair)
+      plnx.returnOrderBook(pair, count)
         .then( depth => {
           depth = { buy: depth.bids, sell: depth.asks }
           _.each(depth, (entries, type) => {
