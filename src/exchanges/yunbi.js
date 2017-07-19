@@ -12,40 +12,7 @@ const yunbi = new Api(key, secret)
 
 class Yunbi {
 
-  // buy() {
-  //   return privateMethods.addOrder.apply(this, ['buy', ...arguments])
-  // }
-  //
-  // sell() {
-  //   return privateMethods.addOrder.apply(this, ['sell', ...arguments])
-  // }
-  //
-  // balances(account) {
-  //   return new Promise((resolve, reject) => {
-  //     yunbi.getAccount(
-  //       (err, account) => {
-  //         if(err) {
-  //           reject(err)
-  //         } else {
-  //           resolve(
-  //             _.map(account.accounts, a => {
-  //               let a = parseFloat(data.available), o = parseFloat(data.onOrders)
-  //               {"currency":"cny", "balance":"100243840.0", "locked":"0.0"},
-  //               let { currency, balance, locked } = a
-  //               balance = parseFloat(balance)
-  //               locked = parseFloat(locked)
-  //               return {
-  //                 asset: currency,
-  //                 balance,
-  //                 available: balance - locked,
-  //                 pending: locked
-  //               }
-  //             })
-  //           )
-  //         }
-  //       })
-  //   })
-  // }
+  // Public Methods
 
   assets() {
     return new Promise((resolve, reject) => {
@@ -101,6 +68,43 @@ class Yunbi {
         })
     })
   }
+
+  // Authenticated Methods
+
+  // buy() {
+  //   return privateMethods.addOrder.apply(this, ['buy', ...arguments])
+  // }
+  //
+  // sell() {
+  //   return privateMethods.addOrder.apply(this, ['sell', ...arguments])
+  // }
+  //
+  // balances(account) {
+  //   return new Promise((resolve, reject) => {
+  //     yunbi.getAccount(
+  //       (err, account) => {
+  //         if(err) {
+  //           reject(err)
+  //         } else {
+  //           resolve(
+  //             _.map(account.accounts, a => {
+  //               let a = parseFloat(data.available), o = parseFloat(data.onOrders)
+  //               {"currency":"cny", "balance":"100243840.0", "locked":"0.0"},
+  //               let { currency, balance, locked } = a
+  //               balance = parseFloat(balance)
+  //               locked = parseFloat(locked)
+  //               return {
+  //                 asset: currency,
+  //                 balance,
+  //                 available: balance - locked,
+  //                 pending: locked
+  //               }
+  //             })
+  //           )
+  //         }
+  //       })
+  //   })
+  // }
 
 }
 

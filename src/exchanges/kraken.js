@@ -12,61 +12,7 @@ const kraken = new Api(key, secret)
 
 class Kraken {
 
-  buy() {
-    return privateMethods.addOrder.apply(this, ['buy', ...arguments])
-  }
-
-  sell() {
-    return privateMethods.addOrder.apply(this, ['sell', ...arguments])
-  }
-
-  balances() {
-    return new Promise((resolve, reject) => {
-      kraken.api('Balance', null, (err, balanceResponse) => {
-        if(err) {
-          reject(err.message)
-        } else {
-          let balances = balanceResponse.result
-          kraken.api('Assets', null, (err, assetData) => {
-            if(err) {
-              reject(err.message)
-            } else {
-              kraken.api('OpenOrders', null, (err, ordersResponse) => {
-                if(err) {
-                  reject(err)
-                } else {
-                  balances = _.map(balances, (balance, asset) => {
-                    asset = _.find(assetData.result, (data, name) => name === asset)
-                    asset = asset ? asset.altname : asset
-
-                    balance = parseFloat(balance)
-                    let pending = _.reduce(ordersResponse.result.open, (sum, o) => {
-                      if(o.descr.pair.substring(0, asset.length) === asset)
-                        return sum + parseFloat(o.vol)
-                      return sum
-                    }, 0)
-                    let available = balance - pending
-
-                    // Replace alt name after dealing with Kraken response
-                    let alt
-                    asset = (alt = Kraken.alts[asset]) ? alt : asset
-
-                    return {
-                      asset,
-                      balance,
-                      available,
-                      pending: balance - pending
-                    }
-                  })
-                  resolve(balances)
-                }
-              })
-            }
-          })
-        }
-      })
-    })
-  }
+  // Public Methods
 
   assets() {
     return new Promise((resolve, reject) => {
@@ -137,24 +83,61 @@ class Kraken {
     })
   }
 
-  marketTrades(pair, since, end) {
+  // Authenticated Methods
+
+  buy() {
+    return privateMethods.addOrder.apply(this, ['buy', ...arguments])
+  }
+
+  sell() {
+    return privateMethods.addOrder.apply(this, ['sell', ...arguments])
+  }
+
+  balances() {
     return new Promise((resolve, reject) => {
-      kraken.api('Trades', { pair, since })
-        .then( trades => {
-          trades = _.map(trades, t => {
-            return {
-              tradeId: t.tradeId,
-              date: Date.parse(t.date),
-              type: t.type,
-              rate: parseFloat(t.rate),
-              amount: parseFloat(t.amount),
-              total: parseFloat(t.total)
+      kraken.api('Balance', null, (err, balanceResponse) => {
+        if(err) {
+          reject(err.message)
+        } else {
+          let balances = balanceResponse.result
+          kraken.api('Assets', null, (err, assetData) => {
+            if(err) {
+              reject(err.message)
+            } else {
+              kraken.api('OpenOrders', null, (err, ordersResponse) => {
+                if(err) {
+                  reject(err)
+                } else {
+                  balances = _.map(balances, (balance, asset) => {
+                    asset = _.find(assetData.result, (data, name) => name === asset)
+                    asset = asset ? asset.altname : asset
+
+                    balance = parseFloat(balance)
+                    let pending = _.reduce(ordersResponse.result.open, (sum, o) => {
+                      if(o.descr.pair.substring(0, asset.length) === asset)
+                        return sum + parseFloat(o.vol)
+                      return sum
+                    }, 0)
+                    let available = balance - pending
+
+                    // Replace alt name after dealing with Kraken response
+                    let alt
+                    asset = (alt = Kraken.alts[asset]) ? alt : asset
+
+                    return {
+                      asset,
+                      balance,
+                      available,
+                      pending: balance - pending
+                    }
+                  })
+                  resolve(balances)
+                }
+              })
             }
           })
-          trades = _.filter(trades, t => t.date < end)
-          resolve(trades)
-        })
-        .catch(err => reject(err.message))
+        }
+      })
     })
   }
 

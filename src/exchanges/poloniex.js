@@ -12,34 +12,7 @@ const plnx = new Api(key, secret)
 
 class Poloniex {
 
-  buy() {
-    return privateMethods.addOrder.apply(this, ['buy', ...arguments])
-  }
-
-  sell() {
-    return privateMethods.addOrder.apply(this, ['sell', ...arguments])
-  }
-
-  balances(account) {
-    return new Promise((resolve, reject) => {
-      plnx.returnCompleteBalances(account)
-        .then( currencies => {
-          resolve(
-            _.map(currencies, (data, asset) => {
-              let available = parseFloat(data.available)
-              let pending = parseFloat(data.onOrders)
-              return {
-                asset,
-                balance: available + pending,
-                available,
-                pending
-              }
-            })
-          )
-        })
-        .catch(err => reject(err.message))
-    })
-  }
+  // Public Methods
 
   assets() {
      return new Promise((resolve, reject) => {
@@ -76,6 +49,37 @@ class Poloniex {
             depth[type] = _.map(entries, entry => _.map(entry, parseFloat))
           })
           resolve(depth)
+        })
+        .catch(err => reject(err.message))
+    })
+  }
+
+  // Authenticated Methods
+
+  buy() {
+    return privateMethods.addOrder.apply(this, ['buy', ...arguments])
+  }
+
+  sell() {
+    return privateMethods.addOrder.apply(this, ['sell', ...arguments])
+  }
+
+  balances(account) {
+    return new Promise((resolve, reject) => {
+      plnx.returnCompleteBalances(account)
+        .then( currencies => {
+          resolve(
+            _.map(currencies, (data, asset) => {
+              let available = parseFloat(data.available)
+              let pending = parseFloat(data.onOrders)
+              return {
+                asset,
+                balance: available + pending,
+                available,
+                pending
+              }
+            })
+          )
         })
         .catch(err => reject(err.message))
     })

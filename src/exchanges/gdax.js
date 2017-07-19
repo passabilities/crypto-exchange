@@ -10,33 +10,7 @@ const gdax = new Api.AuthenticatedClient(key, secret, passphrase)
 
 class GDAX {
 
-  buy() {
-    return privateMethods.addOrder.apply(this, ['buy', ...arguments])
-  }
-
-  sell() {
-    return privateMethods.addOrder.apply(this, ['sell', ...arguments])
-  }
-
-  balances() {
-    return new Promise((resolve, reject) => {
-      gdax.getAccounts((err, response, data) => {
-        if(err) {
-          reject(err.message)
-        } else {
-          let balances = _.map(data, (acct) => {
-            return {
-              asset: acct.currency,
-              balance: parseFloat(acct.balance),
-              available: parseFloat(acct.available),
-              pending: parseFloat(acct.holds)
-            }
-          })
-          resolve(balances)
-        }
-      })
-    })
-  }
+  // Public Methods
 
   assets() {
     return new Promise((resolve, reject) => {
@@ -87,6 +61,36 @@ class GDAX {
             resolve(depth)
           }
         })
+    })
+  }
+
+  // Authenticated Methods
+
+  buy() {
+    return privateMethods.addOrder.apply(this, ['buy', ...arguments])
+  }
+
+  sell() {
+    return privateMethods.addOrder.apply(this, ['sell', ...arguments])
+  }
+
+  balances() {
+    return new Promise((resolve, reject) => {
+      gdax.getAccounts((err, response, data) => {
+        if(err) {
+          reject(err.message)
+        } else {
+          let balances = _.map(data, (acct) => {
+            return {
+              asset: acct.currency,
+              balance: parseFloat(acct.balance),
+              available: parseFloat(acct.available),
+              pending: parseFloat(acct.holds)
+            }
+          })
+          resolve(balances)
+        }
+      })
     })
   }
 

@@ -15,32 +15,7 @@ bittrex.options({
 
 class Bittrex {
 
-  buy() {
-    return privateMethods.addOrder.apply(this, ['buy', ...arguments])
-  }
-
-  sell() {
-    return privateMethods.addOrder.apply(this, ['sell', ...arguments])
-  }
-
-  balances() {
-    return new Promise((resolve, reject) => {
-      bittrex.getbalances( response => {
-        if(response.success) {
-          let currencies = _.map(response.result, (currency) => {
-            return {
-              asset: currency.Currency,
-              balance: parseFloat(currency.Balance),
-              available: parseFloat(currency.Available),
-              pending: parseFloat(currency.Pending)
-            }
-          })
-          resolve(currencies)
-        } else
-          reject(response.message)
-      })
-    })
-  }
+  // Public Methods
 
   assets() {
     return new Promise((resolve, reject) => {
@@ -91,6 +66,35 @@ class Bittrex {
             reject(response.message)
           }
         })
+    })
+  }
+
+  // Authenticated Methods
+
+  buy() {
+    return privateMethods.addOrder.apply(this, ['buy', ...arguments])
+  }
+
+  sell() {
+    return privateMethods.addOrder.apply(this, ['sell', ...arguments])
+  }
+
+  balances() {
+    return new Promise((resolve, reject) => {
+      bittrex.getbalances( response => {
+        if(response.success) {
+          let currencies = _.map(response.result, (currency) => {
+            return {
+              asset: currency.Currency,
+              balance: parseFloat(currency.Balance),
+              available: parseFloat(currency.Available),
+              pending: parseFloat(currency.Pending)
+            }
+          })
+          resolve(currencies)
+        } else
+          reject(response.message)
+      })
     })
   }
 
