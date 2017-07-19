@@ -6,6 +6,7 @@ The purpose of this project is to bring together a bunch of cryptocurrency marke
 ## Available Exchanges
 
 * Bittrex
+* GDAX
 
 ## Usage
 
@@ -116,12 +117,21 @@ All exchanges require a minimum of 2 items:
 * `key`
 * `secret`
 
+Special case authentication:
+* GDAX
+  * `passphrase`
+
 Example:
 ```json
 {
   "bittrex": {
     "key": "",
     "secret": ""
+  },
+  "gdax": {
+    "key": "",
+    "secret": "",
+    "passphrase": ""
   }
 }
 ```
