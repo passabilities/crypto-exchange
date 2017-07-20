@@ -18,22 +18,38 @@ The purpose of this project is to bring together a bunch of cryptocurrency marke
 * All methods return a promise with the result passed.
 
 ```javascript
-let { bittrex } = require('crypto-exchange')
-bittrex.pairs()
-  .then( pairs => {
-    console.log(pairs)
-  })
-// => [
-//      'LTC_BTC',
-//      'DOGE_BTC',
-//      'VTC_BTC',
-//      ...
-//    ]
+  let { bittrex } = require('crypto-exchange')
+  bittrex.pairs()
+    .then( pairs => {
+      console.log(pairs)
+    })
+  // [
+  //   'LTC_BTC',
+  //   'DOGE_BTC',
+  //   'VTC_BTC',
+  //   ...
+  // ]
 ```
 
-## Public Methods
+### Exchange List
 
-### ticker
+List of all available exchanges from the package:
+
+```javascript
+  const exchanges = require('crypto-exchange')
+  console.log(Object.keys(exchanges))
+  // [
+  //   'bittrex',
+  //   'gdax'
+  //   'kraken',
+  //   'poloniex',
+  //   ...
+  // ]
+```
+
+### Public Methods
+
+#### ticker
 
 Return current ticker information for a given pair on an exchange.
 
@@ -42,11 +58,11 @@ Return current ticker information for a given pair on an exchange.
   }
 ```
 
-##### Arguments
+###### Arguments
 
 * `pair` string - Pair to get tickr information for.
 
-##### Response
+###### Response
 
 ```javascript
   {
@@ -60,7 +76,7 @@ Return current ticker information for a given pair on an exchange.
   }
 ```
 
-### assets
+#### assets
 
 Returns the available assets on an exchange. If the asset is disabled/frozen, it is not included.
 
@@ -69,7 +85,7 @@ Returns the available assets on an exchange. If the asset is disabled/frozen, it
   }
 ```
 
-##### Response
+###### Response
 
 ```javascript
   [
@@ -83,7 +99,7 @@ Returns the available assets on an exchange. If the asset is disabled/frozen, it
   ]
 ```
 
-### pairs
+#### pairs
 
 Returns the available pairs on an exchange.
 
@@ -92,7 +108,7 @@ Returns the available pairs on an exchange.
   }
 ```
 
-##### Response
+###### Response
 
 ```javascript
   [
@@ -105,7 +121,7 @@ Returns the available pairs on an exchange.
   ]
 ```
 
-### depth
+#### depth
 
 Returns the depth of available buy and sell orders.
 
@@ -114,12 +130,12 @@ Returns the depth of available buy and sell orders.
   }
 ```
 
-##### Arguments
+###### Arguments
 
 * `pair` string - The pair to fetch the order book for.
 * `depth` number (optional) - How big of an order book to return in each direction. DEFAULT: 20
 
-##### Response
+###### Response
 
 ```javascript
 {
@@ -140,7 +156,7 @@ Returns the depth of available buy and sell orders.
 }
 ```
 
-## Authenticated Methods
+### Authenticated Methods
 
 To use authenticated methods, you will need to have a file called `api_keys.json` in the root of your project directory. Any necessary authentication for an exchange should be stored in this file.
 
@@ -167,7 +183,7 @@ Example:
 }
 ```
 
-### buy/sell
+#### buy/sell
 
 Place a buy or sell order on an exchange.
 
@@ -176,19 +192,19 @@ Place a buy or sell order on an exchange.
   }
 ```
 
-##### Arguments
+###### Arguments
 
 * `pair` string - A pair value to trade against.
 * `amount` number - Number representing the amount of ***BASE*** to buy/sell.
 * `rate` number (optional) - Pass a specific rate of the pair to execute.
 
-##### Response
+###### Response
 
 ```javascript
 
 ```
 
-### balances
+#### balances
 
 Return current total, available, and pending balances for an exchange.
 
@@ -197,7 +213,7 @@ Return current total, available, and pending balances for an exchange.
   }
 ```
 
-##### Response
+###### Response
 
 ```javascript
   {
@@ -215,4 +231,5 @@ Return current total, available, and pending balances for an exchange.
 This project is a work in progress as I'm adding more exchanges and functions. Help support this project with donations or submit a PR!
 
 BTC: `161kbECzKtDKfLXnC5Lwk2hgsQLtg7BNXd`
+
 ETH: `0xae89158b43000e07e76b205b870a1e34653d2668`
