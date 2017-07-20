@@ -1,4 +1,5 @@
-# crypto-exchange
+# crypto-exchange [![npm](https://img.shields.io/npm/v/crypto-exchange.svg)](https://www.npmjs.com/package/crypto-exchange)
+
 Pulls together list of crypto exchanges to interact with their API's in a uniform fashion.
 
 The purpose of this project is to bring together a bunch of cryptocurrency markets into one standardized package.
@@ -209,3 +210,9 @@ Return current total, available, and pending balances for an exchange.
   }
 ```
 
+## Donate
+
+This project is a work in progress as I'm adding more exchanges and functions. Help support this project with donations or submit a PR!
+
+BTC: `161kbECzKtDKfLXnC5Lwk2hgsQLtg7BNXd`
+ETH: `0xae89158b43000e07e76b205b870a1e34653d2668`
