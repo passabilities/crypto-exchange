@@ -26,6 +26,7 @@
   "homepage": "https://github.com/passabilities/crypto-exchange#readme",
   "dependencies": {
     "gdax": "^0.4.2",
+    "gemini-api": "^2.0.4",
     "kraken-api": "^0.1.7",
     "lodash": "^4.17.4",
     "node.bittrex.api": "^0.3.3",
