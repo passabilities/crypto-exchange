@@ -87,22 +87,22 @@ class Gemini {
 
   balances(account) {
     return new Promise((resolve, reject) => {
-      plnx.returnCompleteBalances(account)
-        .then( currencies => {
+      gemini.getMyAvailableBalances()
+        .then( balances => {
           resolve(
-            _.map(currencies, (data, asset) => {
+            _.map(balances, (data) => {
+              let balance = parseFloat(data.amount)
               let available = parseFloat(data.available)
-              let pending = parseFloat(data.onOrders)
               return {
-                asset,
-                balance: available + pending,
+                asset: data.currency,
+                balance,
                 available,
-                pending
+                pending: balance - available
               }
             })
           )
         })
-        .catch(err => reject(err.message))
+        .catch(err => reject(err))
     })
   }
 
@@ -113,14 +113,17 @@ module.exports = Gemini
 const privateMethods = {
 
   addOrder(type, pair, amount, rate) {
-    pair = Pair.flip(pair)
+    pair = pair.replace('_','')
     return new Promise((resolve, reject) => {
-      plnx.sell(pair, rate, amount, false, false, false)
+      let params = {
+        side: type,
+        symbol: pair,
+        amount,
+        price: rate
+      }
+      gemini.newOrder(params)
         .then( response => {
-          let txid = response.orderNumber
-          resolve({
-            txid
-          })
+          resolve(response)
         })
         .catch(err => reject(err.message))
     })
