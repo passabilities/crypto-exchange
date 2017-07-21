@@ -115,7 +115,7 @@ const privateMethods = {
   addOrder(type, pair, amount, rate) {
     pair = Pair.flip(pair)
     return new Promise((resolve, reject) => {
-      plnx.sell(pair, rate, amount, false, false, false)
+      plnx[type](pair, rate, amount, false, false, false)
         .then( response => {
           let txid = response.orderNumber
           resolve({
