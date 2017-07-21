@@ -133,7 +133,7 @@ Returns the depth of available buy and sell orders.
 ###### Arguments
 
 * `pair` string - The pair to fetch the order book for.
-* `depth` number (optional) - How big of an order book to return in each direction. DEFAULT: 20
+* `depth` number (optional) - How big of an order book to return in each direction. DEFAULT: 50
 
 ###### Response
 
