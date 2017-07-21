@@ -9,5 +9,5 @@ module.exports = {
   gdax: new GDAX,
   kraken: new Kraken,
   poloniex: new Poloniex,
-  yunbi: new Yunbi
+  // yunbi: new Yunbi
 }
