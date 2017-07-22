@@ -16,7 +16,14 @@
     "api",
     "bitcoin",
     "altcoin",
-    "library"
+    "library",
+    "bittrex",
+    "gdax",
+    "gemini",
+    "kraken",
+    "liqui",
+    "poloniex",
+    "yunbi"
   ],
   "author": "Noah Passalacqua",
   "license": "MIT",
