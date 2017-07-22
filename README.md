@@ -10,6 +10,7 @@ The purpose of this project is to bring together a bunch of cryptocurrency marke
 * GDAX
 * Gemini
 * Kraken
+* Liqui
 * Poloniex
 * ~~Yunbi~~
 
