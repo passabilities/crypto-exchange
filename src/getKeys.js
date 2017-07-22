@@ -2,7 +2,8 @@ module.exports = (exchange) => {
   let keys
   // Try to find the API keys file. Default to an empty object if not exist.
   try {
-    keys = require(`${process.cwd()}/api_keys.json`)[exchange] || {}
+    let f = require(`${process.cwd()}/api_keys.json`)
+    keys = f[exchange] || {}
   } catch (e) {
     keys = {}
   }
