@@ -52,7 +52,7 @@ class Poloniex {
     return new Promise((resolve, reject) => {
       plnx.returnTicker()
         .then( tickers => {
-          let pairs = Object.keys(tickers)
+          let pairs = _.keys(tickers)
           pairs = _.map(pairs, Pair.flip)
           resolve(pairs)
         })
