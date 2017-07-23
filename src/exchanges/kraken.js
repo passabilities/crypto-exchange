@@ -98,7 +98,6 @@ class Kraken {
             reject(err)
           } else {
             let [depth] = _.values(response.result)
-            depth = { buy: depth.bids, sell: depth.asks }
             _.each(depth, (entries, type) => {
               depth[type] = _.map(entries, entry => _.map(entry.slice(0, 2), parseFloat))
             })

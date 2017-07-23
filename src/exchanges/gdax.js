@@ -76,8 +76,8 @@ class GDAX {
             reject(err)
           } else {
             let depth = {
-              buy: data.bids.splice(0, count),
-              sell: data.asks.splice(0, count)
+              asks: data.asks.splice(0, count),
+              bids: data.bids.splice(0, count)
             }
             _.each(depth, (entries, type) => {
               depth[type] = _.map(entries, entry => _.map(entry.splice(0,2), parseFloat))

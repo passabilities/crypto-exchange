@@ -65,7 +65,7 @@ class Poloniex {
     return new Promise((resolve, reject) => {
       plnx.returnOrderBook(pair, count)
         .then( depth => {
-          depth = { buy: depth.bids, sell: depth.asks }
+          depth = _.pick(depth, ['asks','bids'])
           _.each(depth, (entries, type) => {
             depth[type] = _.map(entries, entry => _.map(entry, parseFloat))
           })

@@ -73,7 +73,6 @@ class Bitfinex {
           if(err) {
             reject(err.message)
           } else {
-            depth = { buy: depth.bids, sell: depth.asks }
             _.each(depth, (entries, type) => {
               depth[type] = _.map(entries, entry => {
                 return [
