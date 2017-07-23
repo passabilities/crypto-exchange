@@ -1,3 +1,7 @@
+
+* Exchanges added:
+  * Bitfinex
+
 # v1.0.3
 
 * Exchanges added:
