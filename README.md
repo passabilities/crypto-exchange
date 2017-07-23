@@ -7,6 +7,7 @@ The purpose of this project is to bring together a bunch of cryptocurrency marke
 ## Available Exchanges
 
 * Bittrex
+* BTC-e
 * GDAX
 * Gemini
 * Kraken
