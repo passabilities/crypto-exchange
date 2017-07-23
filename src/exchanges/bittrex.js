@@ -74,8 +74,12 @@ class Bittrex {
     return new Promise((resolve, reject) => {
       bittrex.getorderbook({ market: pair, type: 'both', depth: count },
         (response) => {
-          if(response.success) {
-            let depth = response.result
+          let { success, result: { buy, sell } } = response
+          if(success) {
+            let depth = {
+              asks: sell.splice(0, count),
+              bids: buy.splice(0, count)
+            }
             _.each(depth, (entries, type) => {
               depth[type] = _.map(entries, entry => {
                 return [

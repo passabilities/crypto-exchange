@@ -65,7 +65,6 @@ class Gemini {
       }
       gemini.getOrderBook(pair, params)
         .then( depth => {
-          depth = { buy: depth.bids, sell: depth.asks }
           _.each(depth, (entries, type) => {
             depth[type] = _.map(entries, entry => [ parseFloat(entry.price), parseFloat(entry.amount) ])
           })

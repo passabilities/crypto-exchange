@@ -1,6 +1,7 @@
 
 * Exchanges added:
   * Bitfinex
+* `depth` method now returns `{ asks, bids }` instead of `{ sell, buy }`
 
 # v1.0.3
 

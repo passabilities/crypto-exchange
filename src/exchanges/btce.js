@@ -70,7 +70,6 @@ class BTCe {
             reject(err.message)
           } else {
             depth = depth[pair.toLowerCase()]
-            depth = { buy: depth.bids, sell: depth.asks }
             resolve(depth)
           }
         })

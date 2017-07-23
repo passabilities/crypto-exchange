@@ -143,17 +143,17 @@ Returns the depth of available buy and sell orders.
 
 ```javascript
 {
-  'buy': [
-    [
-      0.09936617, // price
-      90.59674753 // volume
-    ],
-    ...
-  ],
-  'sell': [
+  'asks': [
     [
       0.0994,     // price
       50.30181086 // volume
+    ],
+    ...
+  ],
+  'bids': [
+    [
+      0.09936617, // price
+      90.59674753 // volume
     ],
     ...
   ]

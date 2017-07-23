@@ -62,7 +62,6 @@ class Liqui {
       liqui.depth(pair, count)
         .then( depth => {
           depth = depth[pair.toLowerCase()]
-          depth = { buy: depth.bids, sell: depth.asks }
           resolve(depth)
         })
         .catch(err => reject(err.error))
