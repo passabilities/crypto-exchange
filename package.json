@@ -1,10 +1,11 @@
 {
   "name": "crypto-exchange",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Pulls together list of crypto exchanges to interact with their API's in a uniform fashion.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "version": "git add -A"
   },
   "repository": {
     "type": "git",

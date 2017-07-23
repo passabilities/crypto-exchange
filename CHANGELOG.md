@@ -1,3 +1,9 @@
+# v1.0.3
+
+* Exchanges added:
+  * Liqui
+  * BTC-e
+
 # v1.0.2
 
 * Exchanges added:
