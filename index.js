@@ -1,3 +1,4 @@
+const Bitfinex  = require('./src/exchanges/bitfinex')
 const Bittrex   = require('./src/exchanges/bittrex')
 const BTCe      = require('./src/exchanges/btce')
 const GDAX      = require('./src/exchanges/gdax')
@@ -8,6 +9,7 @@ const Poloniex  = require('./src/exchanges/poloniex')
 const Yunbi     = require('./src/exchanges/yunbi')
 
 module.exports = {
+  bitfinex: new Bitfinex,
   bittrex:  new Bittrex,
   btce:     new BTCe,
   gdax:     new GDAX,
