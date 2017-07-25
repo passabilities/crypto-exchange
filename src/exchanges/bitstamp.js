@@ -95,22 +95,21 @@ class Bitstamp {
 
   balances() {
     return new Promise((resolve, reject) => {
-      bitfinex.wallet_balances(
+      bitstamp.balance(
         (err, balances) => {
           if(err) {
             reject(err.message)
           } else {
-            balances = _.filter(balances, b => b.type === 'exchange')
-            balances = _.map(balances, (result, b) => {
-              let balance = parseFloat(b.amount)
-              let available = parseFloat(b.available)
-              return {
-                asset: b.currency.toUpperCase(),
-                balance,
-                available,
-                pending: balance - available
-              }
-            })
+            balances = _.reduce(balances, (result, b, key) => {
+              let [ asset, access ] = key.split('_')
+              asset = asset.toUpperCase()
+              access = access === 'reserved' ? 'pending' : access
+
+              let balance = result[asset] || { asset }
+              balance[access] = parseFloat(b)
+
+              return result
+            }, {})
             resolve(balances)
           }
         })
@@ -128,7 +127,7 @@ const privateMethods = {
       pair = pair.replace('_','')
       amount = amount.toString()
       rate = rate.toString()
-      bitfinex.new_order(pair, amount, rate, 'bitfinex', type, 'limit',
+      bitstamp[type](pair, amount, rate, null,
         (err, res) => {
           if(err) {
             reject(err.message)
