@@ -81,8 +81,8 @@ class Yunbi {
             reject(err)
           } else {
             depth = {
-              asks: depth.asks.splice(0, count),
-              bids: depth.bids.splice(0, count)
+              asks: depth.asks.slice(0, count),
+              bids: depth.bids.slice(0, count)
             }
             _.each(depth, (entries, type) => {
               depth[type] = _.map(entries, entry => _.map(entry, parseFloat))

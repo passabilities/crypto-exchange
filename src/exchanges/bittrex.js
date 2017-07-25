@@ -77,8 +77,8 @@ class Bittrex {
           let { success, result: { buy, sell } } = response
           if(success) {
             let depth = {
-              asks: sell.splice(0, count),
-              bids: buy.splice(0, count)
+              asks: sell.slice(0, count),
+              bids: buy.slice(0, count)
             }
             _.each(depth, (entries, type) => {
               depth[type] = _.map(entries, entry => {
