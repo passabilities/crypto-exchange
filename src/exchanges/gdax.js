@@ -76,11 +76,11 @@ class GDAX {
             reject(err)
           } else {
             let depth = {
-              asks: data.asks.splice(0, count),
-              bids: data.bids.splice(0, count)
+              asks: data.asks.slice(0, count),
+              bids: data.bids.slice(0, count)
             }
             _.each(depth, (entries, type) => {
-              depth[type] = _.map(entries, entry => _.map(entry.splice(0,2), parseFloat))
+              depth[type] = _.map(entries, entry => _.map(entry.slice(0,2), parseFloat))
             })
             resolve(depth)
           }

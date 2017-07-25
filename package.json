@@ -18,6 +18,8 @@
     "bitcoin",
     "altcoin",
     "library",
+    "bitfinex",
+    "bitstamp",
     "bittrex",
     "btc-e",
     "gdax",
@@ -35,6 +37,7 @@
   "homepage": "https://github.com/passabilities/crypto-exchange#readme",
   "dependencies": {
     "bitfinex": "^1.0.3",
+    "bitstamp": "^1.0.1",
     "btc-e": "github:Lexazan/node-btc-e",
     "gdax": "^0.4.2",
     "gemini-api": "^2.0.4",

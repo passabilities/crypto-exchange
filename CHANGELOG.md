@@ -1,3 +1,6 @@
+* Exchanges added:
+  * Bitstamp
+
 # v1.1.0
 
 * Exchanges added:
