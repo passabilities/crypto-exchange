@@ -1,14 +1,15 @@
 const Api = require('gdax')
 const _ = require('lodash')
 
-const { key, secret, passphrase } = require('../getKeys')('gdax')
-const gdax = new Api.AuthenticatedClient(key, secret, passphrase)
-
 /**
  * NOTE: GDAX API returns pairs in "base-quote" order.
  */
 
 class GDAX {
+
+  constructor({ key, secret, passphrase }) {
+    this.gdax = new Api.AuthenticatedClient(key, secret, passphrase)
+  }
 
   // Public Methods
 
@@ -38,7 +39,7 @@ class GDAX {
 
   assets() {
     return new Promise((resolve, reject) => {
-      gdax.getCurrencies((err, response, data) => {
+      this.gdax.getCurrencies((err, response, data) => {
         if(err) {
           reject(err.message)
         } else {
@@ -51,7 +52,7 @@ class GDAX {
 
   pairs() {
     return new Promise((resolve, reject) => {
-      gdax.getProducts((err, response, data) => {
+      this.gdax.getProducts((err, response, data) => {
         if(err) {
           reject(err.message)
         } else {
@@ -70,7 +71,7 @@ class GDAX {
       let args = {
         level: 3 // Get full order book
       }
-      gdax.getProductOrderBook(args, pair,
+      this.gdax.getProductOrderBook(args, pair,
         (err, response, data) => {
           if(err) {
             reject(err)
@@ -100,7 +101,7 @@ class GDAX {
 
   balances() {
     return new Promise((resolve, reject) => {
-      gdax.getAccounts((err, response, data) => {
+      this.gdax.getAccounts((err, response, data) => {
         if(err) {
           reject(err.message)
         } else {
@@ -132,7 +133,7 @@ const privateMethods = {
     }
 
     return new Promise((resolve, reject) => {
-      gdax[type](params, (err, response, data) => {
+      this.gdax[type](params, (err, response, data) => {
         if(err) {
           reject(err.message)
         } else {

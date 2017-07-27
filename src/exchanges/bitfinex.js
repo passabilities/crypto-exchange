@@ -1,23 +1,22 @@
 const Api = require('bitfinex')
 const _ = require('lodash')
 
-const Pair = require('../../lib/pair')
-
-const { key, secret } = require('../getKeys')('bitfinex')
-const bitfinex = new Api(key, secret)
-
 /**
  * NOTE: Bittrex API returns pairs in "quote-base" order.
  */
 
 class Bitfinex {
 
+  constructor({ key, secret }) {
+    this.bitfinex = new Api(key, secret)
+  }
+
   // Public Methods
 
   ticker(pair) {
     return new Promise((resolve, reject) => {
       pair = pair.replace('_','')
-      bitfinex.ticker(pair,
+      this.bitfinex.ticker(pair,
         (err, tick) => {
           if(err) {
             reject(err.message)
@@ -51,7 +50,7 @@ class Bitfinex {
 
   pairs() {
     return new Promise((resolve, reject) => {
-      bitfinex.get_symbols(
+      this.bitfinex.get_symbols(
         (err, pairs) => {
           if(err) {
             reject(err.message)
@@ -68,7 +67,7 @@ class Bitfinex {
   depth(pair, count=50) {
     return new Promise((resolve, reject) => {
       pair = pair.replace('_','')
-      bitfinex.orderbook(pair, { limit_asks: count, limit_bids: count },
+      this.bitfinex.orderbook(pair, { limit_asks: count, limit_bids: count },
         (err, depth) => {
           if(err) {
             reject(err.message)
@@ -99,7 +98,7 @@ class Bitfinex {
 
   balances() {
     return new Promise((resolve, reject) => {
-      bitfinex.wallet_balances(
+      this.bitfinex.wallet_balances(
         (err, balances) => {
           if(err) {
             reject(err.message)
@@ -132,7 +131,7 @@ const privateMethods = {
       pair = pair.replace('_','')
       amount = amount.toString()
       rate = rate.toString()
-      bitfinex.new_order(pair, amount, rate, 'bitfinex', type, 'limit',
+      this.bitfinex.new_order(pair, amount, rate, 'bitfinex', type, 'limit',
         (err, res) => {
           if(err) {
             reject(err.message)

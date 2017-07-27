@@ -1,22 +1,21 @@
 const Api = require('node.liqui.io')
 const _ = require('lodash')
 
-const Pair = require('../../lib/pair')
-
-const { key, secret } = require('../getKeys')('liqui')
-const liqui = new Api(key, secret)
-
 /**
  * NOTE: When dealing with pairs, they must be flipped before returned.
  */
 
 class Liqui {
 
+  constructor({ key, secret }) {
+    this.liqui = new Api(key, secret)
+  }
+
   // Public Methods
 
   ticker(pair) {
     return new Promise((resolve, reject) => {
-      liqui.ticker(pair)
+      this.liqui.ticker(pair)
         .then( tick => {
           let { last, sell, buy, high, low, vol, updated } = tick[pair.toLowerCase()]
           resolve({
@@ -47,7 +46,7 @@ class Liqui {
 
   pairs() {
     return new Promise((resolve, reject) => {
-      liqui.info()
+      this.liqui.info()
         .then( info => {
           let pairs = _.keys(info.pairs)
           pairs = _.map(pairs, p => p.toUpperCase())
@@ -59,7 +58,7 @@ class Liqui {
 
   depth(pair, count=50) {
     return new Promise((resolve, reject) => {
-      liqui.depth(pair, count)
+      this.liqui.depth(pair, count)
         .then( depth => {
           depth = depth[pair.toLowerCase()]
           resolve(depth)
@@ -80,7 +79,7 @@ class Liqui {
 
   balances() {
     return new Promise((resolve, reject) => {
-      liqui.getInfo()
+      this.liqui.getInfo()
         .then( result => {
           resolve(
             _.map(result.funds, (balance, asset) => {
@@ -108,7 +107,7 @@ const privateMethods = {
     pair = pair.toLowerCase()
     return new Promise((resolve, reject) => {
       let params = { pair, rate, amount }
-      liqui[type](params)
+      this.liqui[type](params)
         .then( response => {
           resolve(response)
         })

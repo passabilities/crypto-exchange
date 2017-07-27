@@ -1,16 +1,15 @@
 const Api = require('kraken-api')
 const _ = require('lodash')
 
-const Pair = require('../../lib/pair')
-
-const { key, secret } = require('../getKeys')('kraken')
-const kraken = new Api(key, secret)
-
 /**
  * NOTE: Kraken API returns pairs in "basequote" order and deals with alt names.
  */
 
 class Kraken {
+
+  constructor({ key, secret }) {
+    this.kraken = new Api(key, secret)
+  }
 
   // Public Methods
 
@@ -19,7 +18,7 @@ class Kraken {
     pair = pair.replace('_','')
 
     return new Promise((resolve, reject) => {
-      kraken.api('Ticker', { pair },
+      this.kraken.api('Ticker', { pair },
         (err, data) => {
           if(err) {
             reject(err.message)
@@ -41,7 +40,7 @@ class Kraken {
 
   assets() {
     return new Promise((resolve, reject) => {
-      kraken.api('Assets', null, (err, data) => {
+      this.kraken.api('Assets', null, (err, data) => {
         if(err) {
           reject(err.message)
         } else {
@@ -57,11 +56,11 @@ class Kraken {
 
   pairs() {
     return new Promise((resolve, reject) => {
-      kraken.api('AssetPairs', null, (err, pairData) => {
+      this.kraken.api('AssetPairs', null, (err, pairData) => {
         if(err) {
           reject(err.message)
         } else {
-          kraken.api('Assets', null, (err, assetData) => {
+          this.kraken.api('Assets', null, (err, assetData) => {
             if(err) {
               reject(err.message)
             } else {
@@ -92,7 +91,7 @@ class Kraken {
     pair = pair.replace('_','')
 
     return new Promise((resolve, reject) => {
-      kraken.api('Depth', { pair, count },
+      this.kraken.api('Depth', { pair, count },
         (err, response) => {
           if(err) {
             reject(err)
@@ -119,16 +118,16 @@ class Kraken {
 
   balances() {
     return new Promise((resolve, reject) => {
-      kraken.api('Balance', null, (err, balanceResponse) => {
+      this.kraken.api('Balance', null, (err, balanceResponse) => {
         if(err) {
           reject(err.message)
         } else {
           let balances = balanceResponse.result
-          kraken.api('Assets', null, (err, assetData) => {
+          this.kraken.api('Assets', null, (err, assetData) => {
             if(err) {
               reject(err.message)
             } else {
-              kraken.api('OpenOrders', null, (err, ordersResponse) => {
+              this.kraken.api('OpenOrders', null, (err, ordersResponse) => {
                 if(err) {
                   reject(err)
                 } else {
@@ -188,7 +187,7 @@ const privateMethods = {
     }
 
     return new Promise((resolve, reject) => {
-      kraken.api('AddOrder', data,
+      this.kraken.api('AddOrder', data,
         (err, response) => {
           if(err) {
             reject(err.message)
