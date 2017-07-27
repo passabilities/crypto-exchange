@@ -3,14 +3,15 @@ const _ = require('lodash')
 
 const Pair = require('../../lib/pair')
 
-const { key, secret } = require('../getKeys')('poloniex')
-const plnx = new Api(key, secret)
-
 /**
  * NOTE: When dealing with pairs, they must be flipped before returned.
  */
 
 class Poloniex {
+
+  constructor({ key, secret }) {
+    this.plnx = new Api(key, secret)
+  }
 
   // Public Methods
 
@@ -18,7 +19,7 @@ class Poloniex {
     pair = Pair.flip(pair)
 
     return new Promise((resolve, reject) => {
-      plnx.returnTicker()
+      this.plnx.returnTicker()
         .then( tickers => {
           let { last, lowestAsk, highestBid, high24hr, low24hr, quoteVolume } = tickers[pair]
           resolve({
@@ -37,7 +38,7 @@ class Poloniex {
 
   assets() {
     return new Promise((resolve, reject) => {
-      plnx.returnCurrencies()
+      this.plnx.returnCurrencies()
         .then( currencies => {
           currencies = _.reduce(currencies, (result, data, sym) => (
             (!data.delisted && !data.disabled) ? result.concat([ sym ]) : result
@@ -50,7 +51,7 @@ class Poloniex {
 
   pairs() {
     return new Promise((resolve, reject) => {
-      plnx.returnTicker()
+      this.plnx.returnTicker()
         .then( tickers => {
           let pairs = _.keys(tickers)
           pairs = _.map(pairs, Pair.flip)
@@ -63,7 +64,7 @@ class Poloniex {
   depth(pair, count=50) {
     pair = Pair.flip(pair)
     return new Promise((resolve, reject) => {
-      plnx.returnOrderBook(pair, count)
+      this.plnx.returnOrderBook(pair, count)
         .then( depth => {
           depth = _.pick(depth, ['asks','bids'])
           _.each(depth, (entries, type) => {
@@ -87,7 +88,7 @@ class Poloniex {
 
   balances(account) {
     return new Promise((resolve, reject) => {
-      plnx.returnCompleteBalances(account)
+      this.plnx.returnCompleteBalances(account)
         .then( currencies => {
           resolve(
             _.map(currencies, (data, asset) => {
@@ -115,7 +116,7 @@ const privateMethods = {
   addOrder(type, pair, amount, rate) {
     pair = Pair.flip(pair)
     return new Promise((resolve, reject) => {
-      plnx[type](pair, rate, amount, false, false, false)
+      this.plnx[type](pair, rate, amount, false, false, false)
         .then( response => {
           let txid = response.orderNumber
           resolve({

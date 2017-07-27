@@ -1,21 +1,11 @@
-const Bitfinex  = require('./src/exchanges/bitfinex')
-const Bittrex   = require('./src/exchanges/bittrex')
-const BTCe      = require('./src/exchanges/btce')
-const GDAX      = require('./src/exchanges/gdax')
-const Gemini    = require('./src/exchanges/gemini')
-const Kraken    = require('./src/exchanges/kraken')
-const Liqui     = require('./src/exchanges/liqui')
-const Poloniex  = require('./src/exchanges/poloniex')
-const Yunbi     = require('./src/exchanges/yunbi')
-
 module.exports = {
-  bitfinex: new Bitfinex,
-  bittrex:  new Bittrex,
-  btce:     new BTCe,
-  gdax:     new GDAX,
-  gemini:   new Gemini,
-  kraken:   new Kraken,
-  liqui:    new Liqui,
-  poloniex: new Poloniex,
-  // yunbi:    new Yunbi
+  bitfinex: require('./src/exchanges/bitfinex'),
+  bittrex:  require('./src/exchanges/bittrex'),
+  btce:     require('./src/exchanges/btce'),
+  gdax:     require('./src/exchanges/gdax'),
+  gemini:   require('./src/exchanges/gemini'),
+  kraken:   require('./src/exchanges/kraken'),
+  liqui:    require('./src/exchanges/liqui'),
+  poloniex: require('./src/exchanges/poloniex'),
+  // yunbi:    require('./src/exchanges/yunbi')
 }

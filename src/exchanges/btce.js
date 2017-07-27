@@ -3,21 +3,22 @@ const _ = require('lodash')
 
 const Pair = require('../../lib/pair')
 
-const { key, secret } = require('../getKeys')('liqui')
-const btce = new Api(key, secret)
-
 /**
  * NOTE: When dealing with pairs, they must be flipped before returned.
  */
 
 class BTCe {
 
+  constructor({ key, secret }) {
+    this.btce = new Api(key, secret)
+  }
+
   // Public Methods
 
   ticker(pair) {
     return new Promise((resolve, reject) => {
       pair = pair.toLowerCase()
-      btce.ticker(pair,
+      this.btce.ticker(pair,
         (err, tick) => {
           if(err) {
             reject(err.message)
@@ -51,7 +52,7 @@ class BTCe {
 
   pairs() {
     return new Promise((resolve, reject) => {
-      btce.info((err, data) => {
+      this.btce.info((err, data) => {
         if(err) {
           reject(err.message)
         } else {
@@ -64,7 +65,7 @@ class BTCe {
   depth(pair, count=50) {
     return new Promise((resolve, reject) => {
       pair = pair.toLowerCase()
-      btce.depth(pair, count,
+      this.btce.depth(pair, count,
         (err, depth) => {
           if(err) {
             reject(err.message)
@@ -88,7 +89,7 @@ class BTCe {
 
   balances() {
     return new Promise((resolve, reject) => {
-      btce.getInfo()
+      this.btce.getInfo()
         .then( result => {
           resolve(
             _.map(result.funds, (balance, asset) => {
@@ -116,7 +117,7 @@ const privateMethods = {
     pair = pair.toLowerCase()
     return new Promise((resolve, reject) => {
       let params = { pair, type, rate, amount }
-      btce.trade(params)
+      this.btce.trade(params)
         .then( response => {
           resolve(response)
         })

@@ -2,7 +2,7 @@
 
 Pulls together list of crypto exchanges to interact with their API's in a uniform fashion.
 
-The purpose of this project is to bring together a bunch of cryptocurrency markets into one standardized package.
+The goal of this project is to be able to interact with a number of different cryptocurrency exchange markets with one standardized package.
 
 ## Available Exchanges
 
@@ -142,27 +142,27 @@ Returns the depth of available buy and sell orders.
 ###### Response
 
 ```javascript
-{
-  'asks': [
-    [
-      0.0994,     // price
-      50.30181086 // volume
+  {
+    'asks': [
+      [
+        0.0994,     // price
+        50.30181086 // volume
+      ],
+      ...
     ],
-    ...
-  ],
-  'bids': [
-    [
-      0.09936617, // price
-      90.59674753 // volume
-    ],
-    ...
-  ]
-}
+    'bids': [
+      [
+        0.09936617, // price
+        90.59674753 // volume
+      ],
+      ...
+    ]
+  }
 ```
 
 ### Authenticated Methods
 
-To use authenticated methods, you will need to have a file called `api_keys.json` in the root of your project directory. Any necessary authentication for an exchange should be stored in this file.
+To use authenticated methods, you will need to pass any necessary authentication data needed from the exchange in the constructor of the exchange.
 
 All exchanges require a minimum of 2 items:
 * `key`
@@ -173,18 +173,19 @@ Special case authentication:
   * `passphrase`
 
 Example:
-```json
-{
-  "bittrex": {
-    "key": "",
-    "secret": ""
-  },
-  "gdax": {
-    "key": "",
-    "secret": "",
-    "passphrase": ""
-  }
-}
+```javascript
+  const Exchanges = require('crypto-exchange')
+
+  let bittrex = new Exchanges.bittrex({
+    key: '',
+    secret: ''
+  })
+
+  let gdax = new Exchanges.gdax({
+    key: '',
+    secret: '',
+    passphrase: ''
+  })
 ```
 
 #### buy/sell

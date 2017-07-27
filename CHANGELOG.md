@@ -1,3 +1,7 @@
+
+* Exchanges do not come already instanciated and must now be done manually.
+* Will not look for API keys in `api_keys.json` anymore. Instead, the keys are expected to be passed in on initialization of each exchange.
+
 # v1.1.0
 
 * Exchanges added:

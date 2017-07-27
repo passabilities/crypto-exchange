@@ -1,16 +1,15 @@
 const Api = require('yunbi-api-module')
 const _ = require('lodash')
 
-const Pair = require('../../lib/pair')
-
-const { key, secret } = require('../getKeys')('yunbi')
-const yunbi = new Api(key, secret)
-
 /**
  * NOTE: When dealing with pairs, replace '/' with an underscore.
  */
 
 class Yunbi {
+
+  constructor({ key, secret }) {
+    this.yunbi = new Api(key, secret)
+  }
 
   // Public Methods
 
@@ -18,7 +17,7 @@ class Yunbi {
     pair = pair.replace('_','').toLowerCase()
 
     return new Promise((resolve, reject) => {
-      yunbi.getTicker(pair,
+      this.yunbi.getTicker(pair,
         (err, ticker) => {
           if(err) {
             reject(err)
@@ -52,7 +51,7 @@ class Yunbi {
 
   pairs() {
     return new Promise((resolve, reject) => {
-      yunbi.getMarkets(
+      this.yunbi.getMarkets(
         (err, markets) => {
           if(err) {
             reject(err)
@@ -75,7 +74,7 @@ class Yunbi {
   depth(pair, count=50) {
     pair = pair.replace('_','').toLowerCase()
     return new Promise((resolve, reject) => {
-      yunbi.getDepth(pair, null,
+      this.yunbi.getDepth(pair, null,
         (err, depth) => {
           if(err) {
             reject(err)
@@ -105,7 +104,7 @@ class Yunbi {
   //
   // balances(account) {
   //   return new Promise((resolve, reject) => {
-  //     yunbi.getAccount(
+  //     this.yunbi.getAccount(
   //       (err, account) => {
   //         if(err) {
   //           reject(err)
@@ -143,7 +142,7 @@ const privateMethods = {
   // addOrder(type, pair, amount, rate) {
   //   pair = pair.replace('_','').toLowerCase()
   //   return new Promise((resolve, reject) => {
-  //     yunbi.createOrder(pair, type, amount, rate, null
+  //     this.yunbi.createOrder(pair, type, amount, rate, null
   //       (err, response) => {
   //         if(err) {
   //           reject(error)

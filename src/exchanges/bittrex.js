@@ -1,13 +1,7 @@
-const bittrex = require('node.bittrex.api')
+const Api = require('node.bittrex.api')
 const _ = require('lodash')
 
 const Pair = require('../../lib/pair')
-
-const { key, secret } = require('../getKeys')('bittrex')
-bittrex.options({
-  apikey: key,
-  apisecret: secret
-})
 
 /**
  * NOTE: Bittrex API returns pairs in "quote-base" order.
@@ -15,12 +9,20 @@ bittrex.options({
 
 class Bittrex {
 
+  constructor({ key, secret }) {
+    this.bittrex = Api
+    this.bittrex.options({
+      apikey: key,
+      apisecret: secret
+    })
+  }
+
   // Public Methods
 
   ticker(pair) {
     pair = Pair.flip(pair).replace('_','-')
     return new Promise((resolve, reject) => {
-      bittrex.getmarketsummary({ market: pair },
+      this.bittrex.getmarketsummary({ market: pair },
         (response) => {
           if(response.success) {
             let { Last, Ask, Bid, High, Low, Volume, TimeStamp } = response.result[0]
@@ -42,7 +44,7 @@ class Bittrex {
 
   assets() {
     return new Promise((resolve, reject) => {
-      bittrex.getcurrencies( response => {
+      this.bittrex.getcurrencies( response => {
         if(response.success) {
           let assets = _.reduce(response.result, (result, data) => (
             data.IsActive ? result.concat([ data.Currency ]) : result
@@ -57,7 +59,7 @@ class Bittrex {
 
   pairs() {
     return new Promise((resolve, reject) => {
-      bittrex.getmarkets( response => {
+      this.bittrex.getmarkets( response => {
         if(response.success) {
           let pairs = _.map(response.result, market => (
             Pair.flip(market.MarketName.replace('-','_'))
@@ -72,7 +74,7 @@ class Bittrex {
   depth(pair, count=50) {
     pair = Pair.flip(pair).replace('_','-')
     return new Promise((resolve, reject) => {
-      bittrex.getorderbook({ market: pair, type: 'both', depth: count },
+      this.bittrex.getorderbook({ market: pair, type: 'both', depth: count },
         (response) => {
           let { success, result: { buy, sell } } = response
           if(success) {
@@ -108,7 +110,7 @@ class Bittrex {
 
   balances() {
     return new Promise((resolve, reject) => {
-      bittrex.getbalances( response => {
+      this.bittrex.getbalances( response => {
         if(response.success) {
           let currencies = _.map(response.result, (currency) => {
             return {
@@ -134,7 +136,7 @@ const privateMethods = {
   addOrder(type, pair, amount, rate) {
     pair = Pair.flip(pair).replace('_','-')
     return new Promise((resolve, reject) => {
-      bittrex[`${type}limit`]({
+      this.bittrex[`${type}limit`]({
         market: pair,
         quantity: amount,
         rate
