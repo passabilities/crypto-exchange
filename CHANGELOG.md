@@ -1,3 +1,6 @@
+
+* Add static methods for public functions. No need to create a new instance if only working with public functions.
+
 # v2.0.0
 
 * Exchanges do not come already instanciated and must now be done manually.

@@ -19,6 +19,9 @@ class Bittrex {
 
   // Public Methods
 
+  static get public() { return new Bittrex({ key: '', secret: '' }) }
+
+  static ticker() { return Bittrex.public.ticker(...arguments) }
   ticker(pair) {
     pair = Pair.flip(pair).replace('_','-')
     return new Promise((resolve, reject) => {
@@ -42,6 +45,7 @@ class Bittrex {
     })
   }
 
+  static assets() { return Bittrex.public.assets(...arguments) }
   assets() {
     return new Promise((resolve, reject) => {
       this.bittrex.getcurrencies( response => {
@@ -57,6 +61,7 @@ class Bittrex {
     })
   }
 
+  static pairs() { return Bittrex.public.pairs(...arguments) }
   pairs() {
     return new Promise((resolve, reject) => {
       this.bittrex.getmarkets( response => {
@@ -71,6 +76,7 @@ class Bittrex {
     })
   }
 
+  static depth() { return Bittrex.public.depth(...arguments) }
   depth(pair, count=50) {
     pair = Pair.flip(pair).replace('_','-')
     return new Promise((resolve, reject) => {

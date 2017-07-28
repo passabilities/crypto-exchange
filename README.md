@@ -53,6 +53,21 @@ List of all available exchanges from the package:
 
 ### Public Methods
 
+All public methods are both accessible via a static function and an instance method.
+If only working with public methods, it is not neccessary to create an instance of the exchange class.
+
+Both examples call the same method:
+```javascript
+  const Exchanges = require('crypto-exchange')
+
+  Exchanges.poloniex.ticker('BTC_USDT')
+  // => Promise { <pending> }
+
+  const poloniex = new Exchanges.poloniex(apiKeys)
+  poloniex.ticker('BTC_USDT')
+  // => Promise { <pending> }
+```
+
 #### ticker
 
 Return current ticker information for a given pair on an exchange.

@@ -13,6 +13,9 @@ class Bitfinex {
 
   // Public Methods
 
+  static get public() { return new Bitfinex({ key: '', secret: '' }) }
+
+  static ticker() { return Bitfinex.public.ticker(...arguments) }
   ticker(pair) {
     return new Promise((resolve, reject) => {
       pair = pair.replace('_','')
@@ -36,6 +39,7 @@ class Bitfinex {
     })
   }
 
+  static assets() { return Bitfinex.public.assets(...arguments) }
   assets() {
     return new Promise((resolve, reject) => {
       this.pairs()
@@ -48,6 +52,7 @@ class Bitfinex {
     })
   }
 
+  static pairs() { return Bitfinex.public.pairs(...arguments) }
   pairs() {
     return new Promise((resolve, reject) => {
       this.bitfinex.get_symbols(
@@ -64,6 +69,7 @@ class Bitfinex {
     })
   }
 
+  static depth() { return Bitfinex.public.depth(...arguments) }
   depth(pair, count=50) {
     return new Promise((resolve, reject) => {
       pair = pair.replace('_','')

@@ -15,6 +15,9 @@ class Poloniex {
 
   // Public Methods
 
+  static get public() { return new Poloniex({ key: '', secret: '' }) }
+
+  static ticker() { return Poloniex.public.ticker(...arguments) }
   ticker(pair) {
     pair = Pair.flip(pair)
 
@@ -36,6 +39,7 @@ class Poloniex {
     })
   }
 
+  static assets() { return Poloniex.public.assets(...arguments) }
   assets() {
     return new Promise((resolve, reject) => {
       this.plnx.returnCurrencies()
@@ -49,6 +53,7 @@ class Poloniex {
     })
   }
 
+  static pairs() { return Poloniex.public.pairs(...arguments) }
   pairs() {
     return new Promise((resolve, reject) => {
       this.plnx.returnTicker()
@@ -61,6 +66,7 @@ class Poloniex {
     })
   }
 
+  static depth() { return Poloniex.public.depth(...arguments) }
   depth(pair, count=50) {
     pair = Pair.flip(pair)
     return new Promise((resolve, reject) => {

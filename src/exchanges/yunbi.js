@@ -13,6 +13,9 @@ class Yunbi {
 
   // Public Methods
 
+  static get public() { return new Yunbi({ key: '', secret: '' }) }
+
+  static ticker() { return Yunbi.public.ticker(...arguments) }
   ticker(pair) {
     pair = pair.replace('_','').toLowerCase()
 
@@ -37,6 +40,7 @@ class Yunbi {
     })
   }
 
+  static assets() { return Yunbi.public.assets(...arguments) }
   assets() {
     return new Promise((resolve, reject) => {
       this.pairs()
@@ -49,6 +53,7 @@ class Yunbi {
     })
   }
 
+  static pairs() { return Yunbi.public.pairs(...arguments) }
   pairs() {
     return new Promise((resolve, reject) => {
       this.yunbi.getMarkets(
@@ -71,6 +76,7 @@ class Yunbi {
     }).catch(console.log)
   }
 
+  static depth() { return Yunbi.public.depth(...arguments) }
   depth(pair, count=50) {
     pair = pair.replace('_','').toLowerCase()
     return new Promise((resolve, reject) => {
