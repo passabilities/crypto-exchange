@@ -1,3 +1,6 @@
+
+* Can pass `ticker` and `depth` methods an array for quick batch fetching.
+
 # v2.0.1
 
 * Add static methods for public functions. No need to create a new instance if only working with public functions.

@@ -40,8 +40,8 @@ The goal of this project is to be able to interact with a number of different cr
 List of all available exchanges from the package:
 
 ```javascript
-  const exchanges = require('crypto-exchange')
-  console.log(Object.keys(exchanges))
+  const Exchanges = require('crypto-exchange')
+  console.log(Object.keys(Exchanges))
   // [
   //   'bittrex',
   //   'gdax'
@@ -54,7 +54,7 @@ List of all available exchanges from the package:
 ### Public Methods
 
 All public methods are both accessible via a static function and an instance method.
-If only working with public methods, it is not neccessary to create an instance of the exchange class.
+If only working with public methods, it is not neccessary to create an instance of the exchange class (one is created internally).
 
 Both examples call the same method:
 ```javascript
@@ -73,25 +73,28 @@ Both examples call the same method:
 Return current ticker information for a given pair on an exchange.
 
 ```javascript
-  ticker(pair) {
+  ticker(pairs) {
   }
 ```
 
 ###### Arguments
 
-* `pair` string - Pair to get tickr information for.
+* `pairs` string, array - One or more pairs to fetch the current ticker for.
 
 ###### Response
 
 ```javascript
   {
-    last: 2336.00001284,
-    ask: 2337.9,
-    bid: 2337,
-    high: 2380,
-    low: 2133,
-    volume: 6597.97852916,
-    timestamp: 1500461237647 // in milliseconds
+    'BTC_USD': {
+      last: 2336.00001284,
+      ask: 2337.9,
+      bid: 2337,
+      high: 2380,
+      low: 2133,
+      volume: 6597.97852916,
+      timestamp: 1500461237647 // in milliseconds
+    },
+    ...
   }
 ```
 
@@ -145,33 +148,36 @@ Returns the available pairs on an exchange.
 Returns the depth of available buy and sell orders.
 
 ```javascript
-  depth(pair[, count = 50]) {
+  depth(pairs[, count = 50]) {
   }
 ```
 
 ###### Arguments
 
-* `pair` string - The pair to fetch the order book for.
+* `pairs` string, array - One or more pairs to fetch the order book for.
 * `depth` number (optional) - How big of an order book to return in each direction. DEFAULT: 50
 
 ###### Response
 
 ```javascript
   {
-    'asks': [
-      [
-        0.0994,     // price
-        50.30181086 // volume
+    'ETH_BTC': {
+      'asks': [
+        [
+          0.06773,     // price
+          10.30181086 // volume
+        ],
+        ...
       ],
-      ...
-    ],
-    'bids': [
-      [
-        0.09936617, // price
-        90.59674753 // volume
-      ],
-      ...
-    ]
+      'bids': [
+        [
+          0.0676, // price
+          7.59674753 // volume
+        ],
+        ...
+      ]
+    },
+    ...
   }
 ```
 
