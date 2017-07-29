@@ -3,7 +3,7 @@ const _ = require('lodash')
 module.exports = _.reduce([
   'bitfinex',
   'bittrex',
-  'btce',
+  // 'btce',
   'gdax',
   'gemini',
   'kraken',

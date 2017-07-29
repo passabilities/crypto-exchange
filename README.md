@@ -8,7 +8,7 @@ The goal of this project is to be able to interact with a number of different cr
 
 * Bitfinex
 * Bittrex
-* BTC-e
+* ~~BTC-e~~ ***shutdown***
 * GDAX
 * Gemini
 * Kraken
