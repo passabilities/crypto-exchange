@@ -1,3 +1,4 @@
+# v2.1.0
 
 * Can pass `ticker` and `depth` methods an array for quick batch fetching.
 * Add `pairs` and `assets` methods to top level of module.
