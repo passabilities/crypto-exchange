@@ -28,6 +28,8 @@ module.exports = _.reduce([
       if(Exchange.hasOwnProperty(prop)) {
         let exchange = new T(authProxy())
         return Exchange[prop].bind(exchange)
+      } else {
+        return Exchange[prop]
       }
     }
 
@@ -40,7 +42,7 @@ module.exports = _.reduce([
 const Exchange = {
 
   ticker(pairs) {
-    return multiProxy(pairs, this.ticker)
+    return multiPairProxy(pairs, this.ticker)
   },
 
   assets() {
@@ -52,7 +54,7 @@ const Exchange = {
   },
 
   depth(pairs, count=50) {
-    return multiProxy(pairs, p => this.depth(p, count))
+    return multiPairProxy(pairs, p => this.depth(p, count))
   }
 
 }
@@ -65,7 +67,7 @@ function authProxy(auth={}) {
   })
 }
 
-function multiProxy(pairs, map) {
+function multiPairProxy(pairs, map) {
   let promises
 
   if(typeof pairs === 'string')

@@ -1,5 +1,6 @@
 
 * Can pass `ticker` and `depth` methods an array for quick batch fetching.
+* Add `pairs` and `assets` methods to top level of module.
 * BTCe is disabled due to site being taken down. [More info](http://www.reuters.com/article/us-greece-russia-arrest-idUSKBN1AB1OP)
 
 # v2.0.1

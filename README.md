@@ -21,21 +21,9 @@ The goal of this project is to be able to interact with a number of different cr
 * **NOTE: Pairs are expected to be in the format *BASE_QUOTE***
 * All methods return a promise with the result passed.
 
-```javascript
-  let { bittrex } = require('crypto-exchange')
-  bittrex.pairs()
-    .then( pairs => {
-      console.log(pairs)
-    })
-  // [
-  //   'LTC_BTC',
-  //   'DOGE_BTC',
-  //   'VTC_BTC',
-  //   ...
-  // ]
-```
+### Top Level
 
-### Exchange List
+#### Exchange List
 
 List of all available exchanges from the package:
 
@@ -49,6 +37,46 @@ List of all available exchanges from the package:
   //   'poloniex',
   //   ...
   // ]
+```
+
+#### pairs
+
+Quickly fetch all available pairs and which exchanges support them.
+
+```javascript
+  const Exchanges = require('crypto-exchange')
+  Exchanges.pairs()
+    .then(console.log)
+  // {
+  //   BTC_USD: [ 'bitfinex', 'gdax', 'gemini', 'kraken' ],
+  //   LTC_USD: [ 'bitfinex', 'gdax', 'kraken' ],
+  //   LTC_BTC: [ 'bitfinex', 'bittrex', 'gdax', 'kraken', 'liqui', 'poloniex' ],
+  //   ETH_USD: [ 'bitfinex', 'gdax', 'gemini', 'kraken' ],
+  //   ETH_BTC: [ 'bitfinex', 'bittrex', 'gdax', 'gemini', 'kraken', 'liqui', 'poloniex' ],
+  //   ETC_BTC: [ 'bitfinex', 'bittrex', 'kraken', 'poloniex' ],
+  //   ETC_USD: [ 'bitfinex', 'kraken' ],
+  //   RRT_USD: [ 'bitfinex' ],
+  //   ...
+  // }
+```
+
+#### assets
+
+Quickly fetch all available assets and which exchanges support them.
+
+```javascript
+  const Exchanges = require('crypto-exchange')
+  Exchanges.pairs()
+    .then(console.log)
+  // {
+  //   BTC: [ 'bitfinex', 'bittrex', 'gdax', 'gemini', 'kraken', 'liqui', 'poloniex' ],
+  //   USD: [ 'bitfinex', 'gdax', 'gemini', 'kraken' ],
+  //   LTC: [ 'bitfinex', 'bittrex', 'gdax', 'kraken', 'liqui', 'poloniex' ],
+  //   ETH: [ 'bitfinex', 'bittrex', 'gdax', 'gemini', 'kraken', 'liqui', 'poloniex' ],
+  //   ETC: [ 'bitfinex', 'bittrex', 'kraken', 'poloniex' ],
+  //   RRT: [ 'bitfinex' ],
+  //   ...
+  // }
 ```
 
 ### Public Methods
