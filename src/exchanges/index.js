@@ -38,19 +38,27 @@ module.exports = _.reduce([
   return exchanges
 }, [])
 
-// Anything in this object is considered a static exchange method.
+// Anything in this object is treated as a static and instance exchange method.
 const Exchange = {
 
   ticker(pairs) {
     return multiPairProxy(pairs, this.ticker)
   },
 
+  // NOTE: Check if assets and pairs are cached before fetching. This is safe because
+  //       this information generally does not change.
   assets() {
-    return this.assets()
+    return this.constructor._assets ?
+      Promise.resolve(this.constructor._assets) :
+      this.assets()
+        .then( assets => this.constructor._assets = assets)
   },
 
   pairs() {
-    return this.pairs()
+    return this.constructor._pairs ?
+      Promise.resolve(this.constructor._pairs) :
+      this.pairs()
+        .then( pairs => this.constructor._pairs = pairs)
   },
 
   depth(pairs, count=50) {

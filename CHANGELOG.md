@@ -1,3 +1,6 @@
+
+* Cache `assets` and `pairs` after initial fetch per exchange.
+
 # v2.1.0
 
 * Can pass `ticker` and `depth` methods an array for quick batch fetching.
