@@ -13,9 +13,6 @@ class Kraken {
 
   // Public Methods
 
-  static get public() { return new Kraken({ key: '', secret: '' }) }
-
-  static ticker() { return Kraken.public.ticker(...arguments) }
   ticker(pair) {
     pair = _.reduce(Kraken.alts, (value, sym, alt) => value.replace(sym, alt), pair)
     pair = pair.replace('_','')
@@ -41,7 +38,6 @@ class Kraken {
     })
   }
 
-  static assets() { return Kraken.public.assets(...arguments) }
   assets() {
     return new Promise((resolve, reject) => {
       this.kraken.api('Assets', null, (err, data) => {
@@ -58,7 +54,6 @@ class Kraken {
     })
   }
 
-  static pairs() { return Kraken.public.pairs(...arguments) }
   pairs() {
     return new Promise((resolve, reject) => {
       this.kraken.api('AssetPairs', null, (err, pairData) => {
@@ -91,7 +86,6 @@ class Kraken {
     })
   }
 
-  static depth() { return Kraken.public.depth(...arguments) }
   depth(pair, count=50) {
     pair = _.reduce(Kraken.alts, (value, sym, alt) => value.replace(sym, alt), pair)
     pair = pair.replace('_','')

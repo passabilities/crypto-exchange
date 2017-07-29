@@ -13,9 +13,6 @@ class Liqui {
 
   // Public Methods
 
-  static get public() { return new Liqui({ key: '', secret: '' }) }
-
-  static ticker() { return Liqui.public.ticker(...arguments) }
   ticker(pair) {
     return new Promise((resolve, reject) => {
       this.liqui.ticker(pair)
@@ -35,7 +32,6 @@ class Liqui {
     })
   }
 
-  static assets() { return Liqui.public.assets(...arguments) }
   assets() {
     return new Promise((resolve, reject) => {
       this.pairs()
@@ -48,7 +44,6 @@ class Liqui {
     })
   }
 
-  static pairs() { return Liqui.public.pairs(...arguments) }
   pairs() {
     return new Promise((resolve, reject) => {
       this.liqui.info()
@@ -61,7 +56,6 @@ class Liqui {
     })
   }
 
-  static depth() { return Liqui.public.depth(...arguments) }
   depth(pair, count=50) {
     return new Promise((resolve, reject) => {
       this.liqui.depth(pair, count)

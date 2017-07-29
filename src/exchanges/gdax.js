@@ -13,9 +13,6 @@ class GDAX {
 
   // Public Methods
 
-  static get public() { return new GDAX({ key: '', secret: '', passphrase: '' }) }
-
-  static ticker() { return GDAX.public.ticker(...arguments) }
   ticker(pair) {
     pair = pair.replace('_','-')
     return new Promise((resolve, reject) => {
@@ -40,7 +37,6 @@ class GDAX {
     })
   }
 
-  static assets() { return GDAX.public.assets(...arguments) }
   assets() {
     return new Promise((resolve, reject) => {
       this.gdax.getCurrencies((err, response, data) => {
@@ -54,7 +50,6 @@ class GDAX {
     })
   }
 
-  static pairs() { return GDAX.public.pairs(...arguments) }
   pairs() {
     return new Promise((resolve, reject) => {
       this.gdax.getProducts((err, response, data) => {
@@ -70,7 +65,6 @@ class GDAX {
     })
   }
 
-  static depth() { return GDAX.public.depth(...arguments) }
   depth(pair, count=50) {
     pair = pair.replace('_','-')
     return new Promise((resolve, reject) => {

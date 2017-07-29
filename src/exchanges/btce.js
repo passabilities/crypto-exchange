@@ -15,9 +15,6 @@ class BTCe {
 
   // Public Methods
 
-  static get public() { return new BTCe({ key: '', secret: '' }) }
-
-  static ticker() { return BTCe.public.ticker(...arguments) }
   ticker(pair) {
     return new Promise((resolve, reject) => {
       pair = pair.toLowerCase()
@@ -41,7 +38,6 @@ class BTCe {
     })
   }
 
-  static assets() { return BTCe.public.assets(...arguments) }
   assets() {
     return new Promise((resolve, reject) => {
       this.pairs()
@@ -54,7 +50,6 @@ class BTCe {
     })
   }
 
-  static pairs() { return BTCe.public.pairs(...arguments) }
   pairs() {
     return new Promise((resolve, reject) => {
       this.btce.info((err, data) => {
@@ -67,7 +62,6 @@ class BTCe {
     })
   }
 
-  static depth() { return BTCe.public.depth(...arguments) }
   depth(pair, count=50) {
     return new Promise((resolve, reject) => {
       pair = pair.toLowerCase()

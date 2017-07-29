@@ -15,9 +15,6 @@ class Gemini {
 
   // Public Methods
 
-  static get public() { return new Gemini({ key: '', secret: '' }) }
-
-  static ticker() { return Gemini.public.ticker(...arguments) }
   ticker(pair) {
     let exPair = pair.replace('_','')
     return new Promise((resolve, reject) => {
@@ -38,7 +35,6 @@ class Gemini {
     })
   }
 
-  static assets() { return Gemini.public.assets(...arguments) }
   assets() {
     return new Promise((resolve, reject) => {
       // The api does not have an endpoint to return available assets.
@@ -50,7 +46,6 @@ class Gemini {
     })
   }
 
-  static pairs() { return Gemini.public.pairs(...arguments) }
   pairs() {
     return new Promise((resolve, reject) => {
       // The api does not have a uniform way to parse the pairs.
@@ -62,7 +57,6 @@ class Gemini {
     })
   }
 
-  static depth() { return Gemini.public.depth(...arguments) }
   depth(pair, count=50) {
     pair = pair.replace('_','')
     return new Promise((resolve, reject) => {
