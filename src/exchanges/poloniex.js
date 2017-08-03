@@ -107,6 +107,16 @@ class Poloniex {
     })
   }
 
+  addresses() {
+    return new Promise((resolve, reject) => {
+      this.plnx.returnDepositAddresses()
+        .then( addresses => {
+          resolve(addresses)
+        })
+        .catch(err => reject(err.message))
+    })
+  }
+
 }
 
 module.exports = Poloniex
