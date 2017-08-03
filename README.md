@@ -66,7 +66,7 @@ Quickly fetch all available assets and which exchanges support them.
 
 ```javascript
   const Exchanges = require('crypto-exchange')
-  Exchanges.pairs()
+  Exchanges.assets()
     .then(console.log)
   // {
   //   BTC: [ 'bitfinex', 'bittrex', 'gdax', 'gemini', 'kraken', 'liqui', 'poloniex' ],
@@ -192,15 +192,15 @@ Returns the depth of available buy and sell orders.
     'ETH_BTC': {
       'asks': [
         [
-          0.06773,     // price
+          0.06773,    // price
           10.30181086 // volume
         ],
         ...
       ],
       'bids': [
         [
-          0.0676, // price
-          7.59674753 // volume
+          0.0676,     // price
+          7.59674753  // volume
         ],
         ...
       ]

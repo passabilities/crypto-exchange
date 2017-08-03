@@ -13,7 +13,7 @@ module.exports = _.reduce([
 ], (exchanges, name) => {
   exchanges[name] = new Proxy(require(`./${name}`), {
 
-    construct(T, auth) {
+    construct(T, [ auth ]) {
       let exchange = new T(authProxy(auth))
       return new Proxy(exchange, {
         get(e, prop) {
