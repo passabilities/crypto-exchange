@@ -1,3 +1,4 @@
+# v2.1.1
 
 * Cache `assets` and `pairs` after initial fetch per exchange.
 
