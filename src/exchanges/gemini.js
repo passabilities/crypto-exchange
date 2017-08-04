@@ -108,8 +108,11 @@ class Gemini {
 
   address(asset) {
     return new Promise((resolve, reject) => {
-      // TODO: fetch addresses
-      reject('Not implemented.')
+      this.gemini.newAddress(asset)
+        .then( response => {
+          resolve(response.address)
+        })
+        .catch(err => reject(err.message))
     })
   }
 

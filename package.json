@@ -37,7 +37,7 @@
     "bitfinex": "^1.0.3",
     "coinbase": "^2.0.6",
     "gdax": "github:passabilities/gdax-node#cb-accounts",
-    "gemini-api": "^2.0.4",
+    "gemini-api": "github:passabilities/gemini-api-node#deposit-address",
     "kraken-api": "^0.1.7",
     "lodash": "^4.17.4",
     "node.bittrex.api": "^0.3.3",
