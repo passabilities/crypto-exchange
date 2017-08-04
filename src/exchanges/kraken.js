@@ -164,6 +164,37 @@ class Kraken {
     })
   }
 
+  address(asset) {
+    return new Promise((resolve, reject) => {
+      for(let alt in Kraken.alts) {
+        if(Kraken.alts[alt] === asset) {
+          asset = alt
+          break
+        }
+      }
+
+      this.kraken.api('DepositMethods', { asset },
+        (err, response) => {
+          if(err) {
+            reject(err.message)
+          } else {
+            let { method } = response.result[0]
+
+            let data = { asset, method, new: true }
+            this.kraken.api('DepositAddresses', data,
+              (err, response) => {
+                if(err) {
+                  reject(err.message)
+                } else {
+                  let { address } = response.result[0]
+                  resolve(address)
+                }
+              })
+          }
+        })
+    })
+  }
+
 }
 
 module.exports = Kraken
