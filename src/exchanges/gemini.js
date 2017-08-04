@@ -106,6 +106,16 @@ class Gemini {
     })
   }
 
+  address(asset) {
+    return new Promise((resolve, reject) => {
+      this.gemini.newAddress(asset)
+        .then( response => {
+          resolve(response.address)
+        })
+        .catch(err => reject(err.message))
+    })
+  }
+
 }
 
 module.exports = Gemini

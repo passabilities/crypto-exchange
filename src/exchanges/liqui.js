@@ -97,6 +97,13 @@ class Liqui {
     })
   }
 
+  address(asset) {
+    return new Promise((resolve, reject) => {
+      // TODO: fetch addresses - Endpoint does not exist.
+      reject('Not implemented.')
+    })
+  }
+
 }
 
 module.exports = Liqui

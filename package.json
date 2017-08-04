@@ -35,9 +35,9 @@
   "homepage": "https://github.com/passabilities/crypto-exchange#readme",
   "dependencies": {
     "bitfinex": "^1.0.3",
-    "btc-e": "github:Lexazan/node-btc-e",
-    "gdax": "^0.4.2",
-    "gemini-api": "^2.0.4",
+    "coinbase": "^2.0.6",
+    "gdax": "github:passabilities/gdax-node#cb-accounts",
+    "gemini-api": "github:passabilities/gemini-api-node#deposit-address",
     "kraken-api": "^0.1.7",
     "lodash": "^4.17.4",
     "node.bittrex.api": "^0.3.3",

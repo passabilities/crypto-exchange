@@ -1,3 +1,6 @@
+
+* Add `address` method to fetch or create deposit addresses for an assets.
+
 # v2.1.1
 
 * Cache `assets` and `pairs` after initial fetch per exchange.
