@@ -1,5 +1,6 @@
 
 * Add `address` method to fetch or create deposit addresses for assets for:
+  * Bitfinex
   * Bittrex
   * Coinbase/GDAX
   * Kraken

@@ -122,14 +122,35 @@ class Bitfinex {
 
   address(asset) {
     return new Promise((resolve, reject) => {
-      // TODO: fetch addresses
-      reject('Not implemented.')
+      let method = Bitfinex.methods[asset]
+      if(method) {
+        this.bitfinex.new_deposit(null, method, 'exchange',
+          (err, response) => {
+            if(err){
+              reject(err.message)
+            } else {
+              resolve(response.address)
+            }
+          })
+      } else {
+        reject(`Cannot deposit ${asset}.`)
+      }
     })
   }
 
 }
 
 module.exports = Bitfinex
+
+Bitfinex.methods = {
+  'BTC': 'bitcoin',
+  'ETH': 'ethereum',
+  'ETC': 'ethereumc',
+  'LTC': 'litecoin',
+  'ZEC': 'zcash',
+  'XEM': 'monero',
+  'IOTA': 'iota'
+}
 
 const privateMethods = {
 
