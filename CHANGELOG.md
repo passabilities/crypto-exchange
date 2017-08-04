@@ -1,10 +1,5 @@
 
-* Add `address` method to fetch or create deposit addresses for assets for:
-  * Bitfinex
-  * Bittrex
-  * Coinbase/GDAX
-  * Kraken
-  * Poloniex
+* Add `address` method to fetch or create deposit addresses for an assets.
 
 # v2.1.1
 
