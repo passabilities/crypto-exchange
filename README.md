@@ -300,7 +300,7 @@ Return or create a new address to which funds can be deposited.
 ###### Response
 
 ```javascript
-  "0x6E5b3df664DC393f91E07D409F5425694ce90161"
+  "0xae89158b43000e07e76b205b870a1e34653d2668"
 ```
 
 ## Donate
