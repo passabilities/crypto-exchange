@@ -127,6 +127,27 @@ class Bittrex {
     })
   }
 
+  address(currency) {
+    return new Promise((resolve, reject) => {
+      this.bittrex.getdepositaddress({ currency },
+        response => {
+          if(response.message === 'ADDRESS_GENERATING') {
+            setTimeout(() => {
+              this.address(currency)
+                .then(resolve)
+                .catch(reject)
+            }, 1000)
+          } else {
+            if(response.success) {
+              resolve(response.result.Address)
+            } else {
+              reject(response.message)
+            }
+          }
+        })
+    })
+  }
+
 }
 
 module.exports = Bittrex
