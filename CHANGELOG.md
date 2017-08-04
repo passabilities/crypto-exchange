@@ -1,3 +1,10 @@
+
+* Add `address` method to fetch or create deposit addresses for assets for:
+  * Bittrex
+  * Coinbase/GDAX
+  * Kraken
+  * Poloniex
+
 # v2.1.1
 
 * Cache `assets` and `pairs` after initial fetch per exchange.
