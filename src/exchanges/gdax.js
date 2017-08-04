@@ -1,4 +1,5 @@
 const Api = require('gdax')
+const coinbase = require('coinbase')
 const _ = require('lodash')
 
 /**
@@ -114,6 +115,35 @@ class GDAX {
             }
           })
           resolve(balances)
+        }
+      })
+    })
+  }
+
+  address(asset, cbAuth) {
+    return new Promise((resolve, reject) => {
+      if(!cbAuth)
+        return reject('Due to how GDAX and Coinbase work, you either pass your Coinbase API keys or use the Coinbase API directly.')
+
+      this.gdax.getCoinbaseAccounts((err, response, data) => {
+        if(err) {
+          reject(err.message)
+        } else {
+          let account = _.find(data, a => a.type === 'wallet' && a.currency === asset)
+          if(!account)
+            return reject(`There is no such asset "${asset}".`)
+
+          let { key, secret } = cbAuth
+          let cb = new coinbase.Client({ apiKey: key, apiSecret: secret })
+          account = new coinbase.model.Account(cb, { id: account.id })
+          account.createAddress(null,
+            (err, address) => {
+              if(err) {
+                reject(err.message)
+              } else {
+                resolve(address.address)
+              }
+            })
         }
       })
     })

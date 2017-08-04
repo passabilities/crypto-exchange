@@ -280,9 +280,32 @@ Return current total, available, and pending balances for an exchange.
   }
 ```
 
+#### address
+
+Return or create a new address to which funds can be deposited.
+
+***Note:*** Due to how Coinbase and GDAX are intertwined, you must pass aditional authentication in order to interact with outside resources.
+
+```javascript
+  address(sym[, opts]) {
+  }
+```
+
+###### Arguments
+
+* `sym` string - The asset symbol of the address to fetch.
+* `opts` object (optional) - Additional options.
+  * `auth` object - Secondary API authentication needed for Coinbase.
+
+###### Response
+
+```javascript
+  "0x6E5b3df664DC393f91E07D409F5425694ce90161"
+```
+
 ## Donate
 
-This project is a work in progress as I'm adding more exchanges and functions. Help support this project with donations or submit a PR!
+This project is a work in progress as I'm adding more exchanges and functions. Help support this project with a :coffee: or PR!
 
 BTC: `161kbECzKtDKfLXnC5Lwk2hgsQLtg7BNXd`
 
