@@ -107,11 +107,25 @@ class Poloniex {
     })
   }
 
-  addresses() {
+  address(asset) {
     return new Promise((resolve, reject) => {
       this.plnx.returnDepositAddresses()
         .then( addresses => {
-          resolve(addresses)
+          let address = addresses[asset]
+
+          if(address) {
+            resolve(address)
+          } else {
+            this.plnx.generateNewAddress(asset)
+              .then( response => {
+                if(response.success) {
+                  resolve(response.response)
+                } else {
+                  reject('Could not create address.')
+                }
+              })
+              .catch(err => reject(err.message))
+          }
         })
         .catch(err => reject(err.message))
     })
