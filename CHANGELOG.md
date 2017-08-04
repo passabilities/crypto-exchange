@@ -1,3 +1,4 @@
+# v2.2.0
 
 * Add `address` method to fetch or create deposit addresses for an assets.
 
