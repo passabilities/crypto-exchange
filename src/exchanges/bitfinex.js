@@ -120,6 +120,13 @@ class Bitfinex {
     })
   }
 
+  address(asset) {
+    return new Promise((resolve, reject) => {
+      // TODO: fetch addresses
+      reject('Not implemented.')
+    })
+  }
+
 }
 
 module.exports = Bitfinex

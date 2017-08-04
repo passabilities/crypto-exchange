@@ -106,6 +106,13 @@ class Gemini {
     })
   }
 
+  address(asset) {
+    return new Promise((resolve, reject) => {
+      // TODO: fetch addresses
+      reject('Not implemented.')
+    })
+  }
+
 }
 
 module.exports = Gemini
