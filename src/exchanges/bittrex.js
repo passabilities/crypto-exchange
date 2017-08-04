@@ -159,6 +159,20 @@ class Bittrex {
     })
   }
 
+  withdraw(currency, quantity, address) {
+    return new Promise((resolve, reject) => {
+      currency = _.reduce(Bittrex.alts, (value, sym, alt) => value.replace(sym, alt), currency)
+      this.bittrex.withdraw({ currency, quantity, address },
+        response => {
+          if(response.success) {
+            resolve(response.result)
+          } else {
+            reject(response.message)
+          }
+        })
+    })
+  }
+
 }
 
 module.exports = Bittrex
