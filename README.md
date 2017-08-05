@@ -284,7 +284,7 @@ Return current total, available, and pending balances for an exchange.
 
 Return or create a new address to which funds can be deposited.
 
-***Note:*** Due to how Coinbase and GDAX are intertwined, you must pass aditional authentication in order to interact with outside resources.
+***Note:*** Due to how Coinbase and GDAX are intertwined, you can only fetch addresses associated with Coinbase's API when working with GDAX.
 
 ```javascript
   address(sym[, opts]) {
