@@ -15,6 +15,7 @@ class Liqui {
 
   ticker(pair) {
     return new Promise((resolve, reject) => {
+      pair = _.reduce(Liqui.alts, (value, sym, alt) => value.replace(sym, alt), pair)
       this.liqui.ticker(pair)
         .then( tick => {
           let { last, sell, buy, high, low, vol, updated } = tick[pair.toLowerCase()]
@@ -36,8 +37,9 @@ class Liqui {
     return new Promise((resolve, reject) => {
       this.pairs()
         .then( pairs => {
-          let assets = _.reduce(pairs, (result, p) => result.concat(p.split('_')), [])
+          let alt, assets = _.reduce(pairs, (result, p) => result.concat(p.split('_')), [])
           assets = _.uniq(assets)
+          assets = _.map(assets, a => (alt = Liqui.alts[a]) ? alt : a)
           resolve(assets)
         })
         .catch(reject)
@@ -49,7 +51,11 @@ class Liqui {
       this.liqui.info()
         .then( info => {
           let pairs = _.keys(info.pairs)
-          pairs = _.map(pairs, p => p.toUpperCase())
+          pairs = _.map(pairs, pair => {
+            pair = pair.toUpperCase()
+            pair = _.reduce(Liqui.alts, (value, sym, alt) => value.replace(alt, sym), pair)
+            return pair
+          })
           resolve(pairs)
         })
         .catch(err => reject(err.error))
@@ -58,6 +64,7 @@ class Liqui {
 
   depth(pair, count=50) {
     return new Promise((resolve, reject) => {
+      pair = _.reduce(Liqui.alts, (value, sym, alt) => value.replace(sym, alt), pair)
       this.liqui.depth(pair, count)
         .then( depth => {
           depth = depth[pair.toLowerCase()]
@@ -83,6 +90,7 @@ class Liqui {
         .then( result => {
           resolve(
             _.map(result.funds, (balance, asset) => {
+              asset = (alt = Liqui.alts[asset]) ? alt : asset
               return {
                 asset,
                 balance,
@@ -98,6 +106,7 @@ class Liqui {
   }
 
   address(asset) {
+    asset = _.reduce(Liqui.alts, (value, sym, alt) => value.replace(sym, alt), asset)
     return new Promise((resolve, reject) => {
       // TODO: fetch addresses - Endpoint does not exist.
       reject('Not implemented.')
@@ -108,9 +117,14 @@ class Liqui {
 
 module.exports = Liqui
 
+Liqui.alts = {
+  'BCC': 'BCH'
+}
+
 const privateMethods = {
 
   addOrder(type, pair, amount, rate) {
+    pair = _.reduce(Liqui.alts, (value, sym, alt) => value.replace(sym, alt), pair)
     pair = pair.toLowerCase()
     return new Promise((resolve, reject) => {
       let params = { pair, rate, amount }

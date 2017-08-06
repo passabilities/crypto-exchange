@@ -20,8 +20,9 @@ class Bittrex {
   // Public Methods
 
   ticker(pair) {
-    pair = Pair.flip(pair).replace('_','-')
     return new Promise((resolve, reject) => {
+      pair = _.reduce(Bittrex.alts, (value, sym, alt) => value.replace(sym, alt), pair)
+      pair = Pair.flip(pair).replace('_','-')
       this.bittrex.getmarketsummary({ market: pair },
         (response) => {
           if(response.success) {
@@ -46,9 +47,11 @@ class Bittrex {
     return new Promise((resolve, reject) => {
       this.bittrex.getcurrencies( response => {
         if(response.success) {
-          let assets = _.reduce(response.result, (result, data) => (
-            data.IsActive ? result.concat([ data.Currency ]) : result
-          ), [])
+          let assets = _.reduce(response.result, (result, data) => {
+            let asset = data.Currency, alt
+            asset = (alt = Bittrex.alts[asset]) ? alt : asset
+            return data.IsActive ? result.concat([ asset ]) : result
+          }, [])
           resolve(assets)
         } else {
           reject(response.message)
@@ -61,9 +64,11 @@ class Bittrex {
     return new Promise((resolve, reject) => {
       this.bittrex.getmarkets( response => {
         if(response.success) {
-          let pairs = _.map(response.result, market => (
-            Pair.flip(market.MarketName.replace('-','_'))
-          ))
+          let pairs = _.map(response.result, market => {
+            let pair = Pair.flip(market.MarketName.replace('-','_'))
+            pair = _.reduce(Bittrex.alts, (value, sym, alt) => value.replace(alt, sym), pair)
+            return pair
+          })
           resolve(pairs)
         } else
           reject(response.message)
@@ -72,8 +77,9 @@ class Bittrex {
   }
 
   depth(pair, count=50) {
-    pair = Pair.flip(pair).replace('_','-')
     return new Promise((resolve, reject) => {
+      pair = _.reduce(Bittrex.alts, (value, sym, alt) => value.replace(sym, alt), pair)
+      pair = Pair.flip(pair).replace('_','-')
       this.bittrex.getorderbook({ market: pair, type: 'both', depth: count },
         (response) => {
           let { success, result: { buy, sell } } = response
@@ -113,8 +119,10 @@ class Bittrex {
       this.bittrex.getbalances( response => {
         if(response.success) {
           let currencies = _.map(response.result, (currency) => {
+            let asset = currency.Currency, alt
+            asset = (alt = Bittrex.alts[asset]) ? alt : asset
             return {
-              asset: currency.Currency,
+              asset,
               balance: parseFloat(currency.Balance),
               available: parseFloat(currency.Available),
               pending: parseFloat(currency.Pending)
@@ -129,6 +137,7 @@ class Bittrex {
 
   address(currency) {
     return new Promise((resolve, reject) => {
+      currency = _.reduce(Bittrex.alts, (value, sym, alt) => value.replace(sym, alt), currency)
       this.bittrex.getdepositaddress({ currency },
         response => {
           if(response.message === 'ADDRESS_GENERATING') {
@@ -152,9 +161,14 @@ class Bittrex {
 
 module.exports = Bittrex
 
+Bittrex.alts = {
+  'BCC': 'BCH'
+}
+
 const privateMethods = {
 
   addOrder(type, pair, amount, rate) {
+    pair = _.reduce(Bittrex.alts, (value, sym, alt) => value.replace(sym, alt), pair)
     pair = Pair.flip(pair).replace('_','-')
     return new Promise((resolve, reject) => {
       this.bittrex[`${type}limit`]({
