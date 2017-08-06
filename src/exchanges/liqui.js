@@ -106,8 +106,8 @@ class Liqui {
   }
 
   address(asset) {
-    asset = _.reduce(Liqui.alts, (value, sym, alt) => value.replace(sym, alt), asset)
     return new Promise((resolve, reject) => {
+      asset = _.reduce(Liqui.alts, (value, sym, alt) => value.replace(sym, alt), asset)
       // TODO: fetch addresses - Endpoint does not exist.
       reject('Not implemented.')
     })

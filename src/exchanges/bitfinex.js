@@ -15,6 +15,7 @@ class Bitfinex {
 
   ticker(pair) {
     return new Promise((resolve, reject) => {
+      pair = _.reduce(Bitfinex.alts, (value, sym, alt) => value.replace(sym, alt), pair)
       pair = pair.replace('_','')
       this.bitfinex.ticker(pair,
         (err, tick) => {
@@ -40,8 +41,9 @@ class Bitfinex {
     return new Promise((resolve, reject) => {
       this.pairs()
         .then( pairs => {
-          let assets = _.reduce(pairs, (result, p) => result.concat(p.split('_')), [])
+          let alt, assets = _.reduce(pairs, (result, p) => result.concat(p.split('_')), [])
           assets = _.uniq(assets)
+          assets = _.map(assets, a => (alt = Bitfinex.alts[a]) ? alt : a)
           resolve(assets)
         })
         .catch(reject)
@@ -52,20 +54,22 @@ class Bitfinex {
     return new Promise((resolve, reject) => {
       this.bitfinex.get_symbols(
         (err, pairs) => {
-          if(err) {
-            reject(err.message)
-          } else {
-            resolve(_.map(pairs, p => (
-              p.replace(/(.{3})(.{3})/, '$1_$2')
-                .toUpperCase()
-            )))
-          }
+          if(err)
+            return reject(err.message)
+
+          pairs = _.map(pairs, pair => {
+            pair = pair.replace(/(.{3})(.{3})/, '$1_$2').toUpperCase()
+            pair = _.reduce(Bitfinex.alts, (value, sym, alt) => value.replace(alt, sym), pair)
+            return pair
+          })
+          resolve(pairs)
         })
     })
   }
 
   depth(pair, count=50) {
     return new Promise((resolve, reject) => {
+      pair = _.reduce(Bitfinex.alts, (value, sym, alt) => value.replace(sym, alt), pair)
       pair = pair.replace('_','')
       this.bitfinex.orderbook(pair, { limit_asks: count, limit_bids: count },
         (err, depth) => {
@@ -105,10 +109,12 @@ class Bitfinex {
           } else {
             balances = _.filter(balances, b => b.type === 'exchange')
             balances = _.map(balances, (result, b) => {
+              let asset = b.currency.toUpperCase()
+              asset = (alt = Bitfinex.alts[asset]) ? alt : asset
               let balance = parseFloat(b.amount)
               let available = parseFloat(b.available)
               return {
-                asset: b.currency.toUpperCase(),
+                asset,
                 balance,
                 available,
                 pending: balance - available
@@ -122,6 +128,7 @@ class Bitfinex {
 
   address(asset) {
     return new Promise((resolve, reject) => {
+      asset = _.reduce(Bitfinex.alts, (value, sym, alt) => value.replace(sym, alt), asset)
       let method = Bitfinex.methods[asset]
       if(method) {
         this.bitfinex.new_deposit(null, method, 'exchange',
@@ -142,6 +149,10 @@ class Bitfinex {
 
 module.exports = Bitfinex
 
+Bitfinex.alts = {
+  'DSH': 'DASH'
+}
+
 Bitfinex.methods = {
   'BTC': 'bitcoin',
   'ETH': 'ethereum',
@@ -156,6 +167,7 @@ const privateMethods = {
 
   addOrder(type, pair, amount, rate) {
     return new Promise((resolve, reject) => {
+      pair = _.reduce(Bitfinex.alts, (value, sym, alt) => value.replace(sym, alt), pair)
       pair = pair.replace('_','')
       amount = amount.toString()
       rate = rate.toString()

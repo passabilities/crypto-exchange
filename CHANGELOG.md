@@ -1,3 +1,6 @@
+
+* Add alt name filter for DASH (`DSH -> DASH`) on Bitfinex.
+
 # v2.2.1
 
 * Add alt name filter for Bitcoin Cash (`BCC -> BCH`) on Bittrex and Liqui.
