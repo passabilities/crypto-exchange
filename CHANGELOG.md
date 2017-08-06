@@ -1,4 +1,7 @@
 # v2.2.1
+
+* Add alt name filter for Bitcoin Cash (`BCC -> BCH`) on Bittrex and Liqui.
+
 # v2.2.0
 
 * Add `address` method to fetch or create deposit addresses for an assets.
