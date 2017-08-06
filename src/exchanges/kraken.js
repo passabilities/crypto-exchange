@@ -20,20 +20,19 @@ class Kraken {
     return new Promise((resolve, reject) => {
       this.kraken.api('Ticker', { pair },
         (err, data) => {
-          if(err) {
-            reject(err.message)
-          } else {
-            let { c: [last], a: [ask], b: [bid], h: [high], l: [low], v: [volume] } = _.values(data.result)[0]
-            resolve({
-              last: parseFloat(last),
-              ask: parseFloat(ask),
-              bid: parseFloat(bid),
-              high: parseFloat(high),
-              low: parseFloat(low),
-              volume: parseFloat(volume),
-              timestamp: Date.now()
-            })
-          }
+          if(err)
+            return reject(err.message)
+
+          let { c: [last], a: [ask], b: [bid], h: [high], l: [low], v: [volume] } = _.values(data.result)[0]
+          resolve({
+            last: parseFloat(last),
+            ask: parseFloat(ask),
+            bid: parseFloat(bid),
+            high: parseFloat(high),
+            low: parseFloat(low),
+            volume: parseFloat(volume),
+            timestamp: Date.now()
+          })
         })
     })
   }
@@ -41,15 +40,14 @@ class Kraken {
   assets() {
     return new Promise((resolve, reject) => {
       this.kraken.api('Assets', null, (err, data) => {
-        if(err) {
-          reject(err.message)
-        } else {
-          let alt, assets
-          assets = _.map(data.result, ({ altname }) => (
-            (alt = Kraken.alts[altname]) ? alt : altname
-          ))
-          resolve(assets)
-        }
+        if(err)
+          return reject(err.message)
+
+        let alt, assets
+        assets = _.map(data.result, ({ altname }) => (
+          (alt = Kraken.alts[altname]) ? alt : altname
+        ))
+        resolve(assets)
       })
     })
   }
@@ -57,31 +55,29 @@ class Kraken {
   pairs() {
     return new Promise((resolve, reject) => {
       this.kraken.api('AssetPairs', null, (err, pairData) => {
-        if(err) {
-          reject(err.message)
-        } else {
-          this.kraken.api('Assets', null, (err, assetData) => {
-            if(err) {
-              reject(err.message)
-            } else {
-              let pairs = _.map(pairData.result, ({ base, quote }) => {
-                let asset, alt
-                asset = _.find(assetData.result, (data, name) => name === base)
-                base = asset ? asset.altname : base
-                base = (alt = Kraken.alts[base]) ? alt : base
+        if(err)
+          return reject(err.message)
 
-                asset = _.find(assetData.result, (data, name) => name === quote)
-                quote = asset ? asset.altname : quote
-                quote = (alt = Kraken.alts[quote]) ? alt : quote
+        this.kraken.api('Assets', null, (err, assetData) => {
+          if(err)
+            return reject(err.message)
 
-                return `${base}_${quote}`
-              })
-              pairs = _.uniq(pairs)
+          let pairs = _.map(pairData.result, ({ base, quote }) => {
+            let asset, alt
+            asset = _.find(assetData.result, (data, name) => name === base)
+            base = asset ? asset.altname : base
+            base = (alt = Kraken.alts[base]) ? alt : base
 
-              resolve(pairs)
-            }
+            asset = _.find(assetData.result, (data, name) => name === quote)
+            quote = asset ? asset.altname : quote
+            quote = (alt = Kraken.alts[quote]) ? alt : quote
+
+            return `${base}_${quote}`
           })
-        }
+          pairs = _.uniq(pairs)
+
+          resolve(pairs)
+        })
       })
     })
   }
@@ -93,15 +89,14 @@ class Kraken {
     return new Promise((resolve, reject) => {
       this.kraken.api('Depth', { pair, count },
         (err, response) => {
-          if(err) {
-            reject(err)
-          } else {
-            let [depth] = _.values(response.result)
-            _.each(depth, (entries, type) => {
-              depth[type] = _.map(entries, entry => _.map(entry.slice(0, 2), parseFloat))
-            })
-            resolve(depth)
-          }
+          if(err)
+            return reject(err)
+
+          let [depth] = _.values(response.result)
+          _.each(depth, (entries, type) => {
+            depth[type] = _.map(entries, entry => _.map(entry.slice(0, 2), parseFloat))
+          })
+          resolve(depth)
         })
     })
   }
@@ -173,22 +168,48 @@ class Kraken {
 
       this.kraken.api('DepositMethods', { asset },
         (err, response) => {
-          if(err) {
-            reject(err.message)
-          } else {
-            let { method } = response.result[0]
+          if(err)
+            return reject(err.message)
 
-            let data = { asset, method, new: true }
-            this.kraken.api('DepositAddresses', data,
-              (err, response) => {
-                if(err) {
-                  reject(err.message)
-                } else {
-                  let { address } = response.result[0]
-                  resolve(address)
-                }
-              })
-          }
+          let { method } = response.result[0]
+
+          let data = { asset, method, new: true }
+          this.kraken.api('DepositAddresses', data,
+            (err, response) => {
+              if(err)
+                return reject(err.message)
+
+              let { address } = response.result[0]
+              resolve(address)
+            })
+        })
+    })
+  }
+
+  withdraw(asset, amount, key) {
+    return new Promise((resolve, reject) => {
+      let params = { asset, amount, key }
+      this.kraken.api('WithdrawInfo', params,
+        (err, response) => {
+          if(err)
+            return reject(err.message)
+
+          let { limit, fee } = response.result
+          if(amount > limit)
+            return reject({
+              message: `Withdraw prevented. Your limit is currently ${limit} ${asset}.`,
+              limit,
+              amount,
+              fee
+            })
+
+          this.kraken.api('Withdraw', params,
+            (err, response) => {
+              if(err)
+                return reject(err.message)
+
+              resolve(response.result)
+            })
         })
     })
   }
@@ -218,14 +239,13 @@ const privateMethods = {
     return new Promise((resolve, reject) => {
       this.kraken.api('AddOrder', data,
         (err, response) => {
-          if(err) {
-            reject(err.message)
-          } else {
-            let { txid } = response.result
-            resolve({
-              txid
-            })
-          }
+          if(err)
+            return reject(err.message)
+
+          let { txid } = response.result
+          resolve({
+            txid
+          })
         })
     })
   }

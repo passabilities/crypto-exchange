@@ -133,9 +133,9 @@ class Poloniex {
     })
   }
 
-  withdraw(sym, amount, address) {
+  withdraw(asset, amount, address) {
     return new Promise((resolve, reject) => {
-      this.plnx.withdraw(sym, amount, address)
+      this.plnx.withdraw(asset, amount, address)
         .then( response => {
           resolve(response)
         })

@@ -150,14 +150,9 @@ class GDAX {
     })
   }
 
-  withdraw(sym, amount, address) {
+  withdraw(currency, amount, crypto_address) {
     return new Promise((resolve, reject) => {
-      let params = {
-        amount,
-        currency: sym,
-        crypto_address: address
-      }
-      this.gdax.withdrawCrypto(params,
+      this.gdax.withdrawCrypto({ amount, currency, crypto_address },
         (err, response, data) => {
           if(err) {
             reject(err.message)
