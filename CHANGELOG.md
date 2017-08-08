@@ -1,3 +1,4 @@
+# v2.2.3
 
 * Fix `balances()` to return in format expected.
 
