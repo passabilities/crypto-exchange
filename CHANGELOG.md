@@ -1,3 +1,6 @@
+
+* Fix `balances()` to return in format expected.
+
 # v2.2.2
 
 * Add alt name filter for DASH (`DSH -> DASH`) on Bitfinex.

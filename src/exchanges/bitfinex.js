@@ -108,18 +108,20 @@ class Bitfinex {
             reject(err.message)
           } else {
             balances = _.filter(balances, b => b.type === 'exchange')
-            balances = _.map(balances, (result, b) => {
+            balances = _.reduce(balances, (result, b) => {
               let asset = b.currency.toUpperCase()
               asset = (alt = Bitfinex.alts[asset]) ? alt : asset
               let balance = parseFloat(b.amount)
               let available = parseFloat(b.available)
-              return {
-                asset,
+
+              result[asset] = {
                 balance,
                 available,
                 pending: balance - available
               }
-            })
+
+              return result
+            }, {})
             resolve(balances)
           }
         })

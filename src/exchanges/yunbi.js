@@ -110,19 +110,21 @@ class Yunbi {
   //           reject(err)
   //         } else {
   //           resolve(
-  //             _.map(account.accounts, a => {
+  //             _.reduce(account.accounts, (result, a) => {
   //               let a = parseFloat(data.available), o = parseFloat(data.onOrders)
   //               {"currency":"cny", "balance":"100243840.0", "locked":"0.0"},
   //               let { currency, balance, locked } = a
   //               balance = parseFloat(balance)
   //               locked = parseFloat(locked)
-  //               return {
-  //                 asset: currency,
+  //
+  //               result[currency] = {
   //                 balance,
   //                 available: balance - locked,
   //                 pending: locked
   //               }
-  //             })
+  //
+  //               return result
+  //             }, {})
   //           )
   //         }
   //       })

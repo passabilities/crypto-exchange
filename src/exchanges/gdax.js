@@ -106,14 +106,15 @@ class GDAX {
         if(err) {
           reject(err.message)
         } else {
-          let balances = _.map(data, (acct) => {
-            return {
-              asset: acct.currency,
+          let balances = _.reduce(data, (result, acct) => {
+            result[acct.currency] = {
               balance: parseFloat(acct.balance),
               available: parseFloat(acct.available),
-              pending: parseFloat(acct.holds)
+              pending: parseFloat(acct.hold)
             }
-          })
+
+            return result
+          }, {})
           resolve(balances)
         }
       })

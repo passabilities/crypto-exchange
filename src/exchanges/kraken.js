@@ -119,47 +119,45 @@ class Kraken {
   balances() {
     return new Promise((resolve, reject) => {
       this.kraken.api('Balance', null, (err, balanceResponse) => {
-        if(err) {
-          reject(err.message)
-        } else {
-          let balances = balanceResponse.result
-          this.kraken.api('Assets', null, (err, assetData) => {
-            if(err) {
-              reject(err.message)
-            } else {
-              this.kraken.api('OpenOrders', null, (err, ordersResponse) => {
-                if(err) {
-                  reject(err)
-                } else {
-                  balances = _.map(balances, (balance, asset) => {
-                    asset = _.find(assetData.result, (data, name) => name === asset)
-                    asset = asset ? asset.altname : asset
+        if(err)
+          return reject(err.message)
 
-                    balance = parseFloat(balance)
-                    let pending = _.reduce(ordersResponse.result.open, (sum, o) => {
-                      if(o.descr.pair.substring(0, asset.length) === asset)
-                        return sum + parseFloat(o.vol)
-                      return sum
-                    }, 0)
-                    let available = balance - pending
+        let balances = balanceResponse.result
+        this.kraken.api('Assets', null, (err, assetData) => {
+          if(err)
+            return reject(err.message)
 
-                    // Replace alt name after dealing with Kraken response
-                    let alt
-                    asset = (alt = Kraken.alts[asset]) ? alt : asset
+          this.kraken.api('OpenOrders', null, (err, ordersResponse) => {
+            if(err)
+              return reject(err)
 
-                    return {
-                      asset,
-                      balance,
-                      available,
-                      pending: balance - pending
-                    }
-                  })
-                  resolve(balances)
-                }
-              })
-            }
+            balances = _.reduce(balances, (result, balance, asset) => {
+              asset = _.find(assetData.result, (data, name) => name === asset)
+              asset = asset ? asset.altname : asset
+
+              balance = parseFloat(balance)
+              let pending = _.reduce(ordersResponse.result.open, (sum, o) => {
+                if(o.descr.pair.substring(0, asset.length) === asset)
+                  return sum + parseFloat(o.vol)
+                return sum
+              }, 0)
+              let available = balance - pending
+
+              // Replace alt name after dealing with Kraken response
+              let alt
+              asset = (alt = Kraken.alts[asset]) ? alt : asset
+
+              result[asset] = {
+                balance,
+                available,
+                pending: balance - pending
+              }
+
+              return result
+            }, {})
+            resolve(balances)
           })
-        }
+        })
       })
     })
   }

@@ -91,16 +91,18 @@ class Poloniex {
       this.plnx.returnCompleteBalances(account)
         .then( currencies => {
           resolve(
-            _.map(currencies, (data, asset) => {
+            _.reduce(currencies, (result, data, asset) => {
               let available = parseFloat(data.available)
               let pending = parseFloat(data.onOrders)
-              return {
-                asset,
+
+              result[asset] = {
                 balance: available + pending,
                 available,
                 pending
               }
-            })
+
+              return result
+            }, {})
           )
         })
         .catch(err => reject(err.message))

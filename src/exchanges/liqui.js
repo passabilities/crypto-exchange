@@ -89,16 +89,18 @@ class Liqui {
       this.liqui.getInfo()
         .then( result => {
           resolve(
-            _.map(result.funds, (balance, asset) => {
+            _.reduce(result.funds, (result, balance, asset) => {
               asset = (alt = Liqui.alts[asset]) ? alt : asset
-              return {
-                asset,
+
+              result[asset] = {
                 balance,
                 available: balance,
                 // TODO: fetch active orders to determine pending balance
                 pending: NaN
               }
-            })
+
+              return result
+            }, {})
           )
         })
         .catch(err => reject(err.error))

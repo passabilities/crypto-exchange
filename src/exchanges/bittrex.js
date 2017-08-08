@@ -118,16 +118,18 @@ class Bittrex {
     return new Promise((resolve, reject) => {
       this.bittrex.getbalances( response => {
         if(response.success) {
-          let currencies = _.map(response.result, (currency) => {
+          let currencies = _.reduce(response.result, (result, currency) => {
             let asset = currency.Currency, alt
             asset = (alt = Bittrex.alts[asset]) ? alt : asset
-            return {
-              asset,
+
+            result[asset] = {
               balance: parseFloat(currency.Balance),
               available: parseFloat(currency.Available),
               pending: parseFloat(currency.Pending)
             }
-          })
+
+            return result
+          }, {})
           resolve(currencies)
         } else
           reject(response.message)

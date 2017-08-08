@@ -90,16 +90,18 @@ class Gemini {
       this.gemini.getMyAvailableBalances()
         .then( balances => {
           resolve(
-            _.map(balances, (data) => {
+            _.reduce(balances, (result, data) => {
               let balance = parseFloat(data.amount)
               let available = parseFloat(data.available)
-              return {
-                asset: data.currency,
+
+              result[data.currency] = {
                 balance,
                 available,
                 pending: balance - available
               }
-            })
+
+              return result
+            }, {})
           )
         })
         .catch(err => reject(err.message))
