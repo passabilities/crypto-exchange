@@ -41,7 +41,7 @@ module.exports = _.reduce([
 const Exchange = {
 
   ticker(pairs) {
-    return multiPairProxy(pairs, this.ticker)
+    return multiPairProxy(pairs, this.ticker.bind(this))
   },
 
   // NOTE: Check if assets and pairs are cached before fetching. This is safe because
