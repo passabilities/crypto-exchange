@@ -1,3 +1,7 @@
+# v2.2.4
+
+* Context bug fixed. #11
+
 # v2.2.3
 
 * Fix `balances()` to return in format expected.
