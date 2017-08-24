@@ -3,6 +3,7 @@
   "version": "2.2.4",
   "description": "Pulls together list of crypto exchanges to interact with their API's in a uniform fashion.",
   "main": "src/index.js",
+  "types": "src/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "version": "./update-version.js && git add -A"
