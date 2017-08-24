@@ -1,3 +1,7 @@
+# v2.3.0
+
+* Add TypeScript typings.
+
 # v2.2.4
 
 * Context bug fixed. #11
