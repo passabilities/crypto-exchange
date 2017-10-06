@@ -1,6 +1,6 @@
 {
   "name": "crypto-exchange",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "description": "Pulls together list of crypto exchanges to interact with their API's in a uniform fashion.",
   "main": "src/index.js",
   "types": "src/index.d.ts",
@@ -37,7 +37,7 @@
   "dependencies": {
     "bitfinex": "^1.0.3",
     "coinbase": "^2.0.6",
-    "gdax": "github:passabilities/gdax-node#cb-accounts",
+    "gdax": "^0.4.2",
     "gemini-api": "github:passabilities/gemini-api-node#deposit-address",
     "kraken-api": "^0.1.7",
     "lodash": "^4.17.4",

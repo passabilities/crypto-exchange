@@ -1,3 +1,7 @@
+# v2.3.1
+
+* Fix GDAX package to install.
+
 # v2.3.0
 
 * Add TypeScript typings.
