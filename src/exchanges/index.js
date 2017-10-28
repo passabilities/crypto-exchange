@@ -62,6 +62,10 @@ const Exchange = {
 
   depth(pairs, count=50) {
     return multiPairProxy(pairs, p => this.depth(p, count))
+  },
+
+  trades(pairs, options={}) {
+    return multiPairProxy(pairs, p => this.trades(p, options))
   }
 
 }

@@ -19,20 +19,19 @@ class Bitfinex {
       pair = pair.replace('_','')
       this.bitfinex.ticker(pair,
         (err, tick) => {
-          if(err) {
-            reject(err.message)
-          } else {
-            let { last_price, ask, bid, high, low, volume, timestamp } = tick
-            resolve({
-              last: parseFloat(last_price),
-              ask: parseFloat(ask),
-              bid: parseFloat(bid),
-              high: parseFloat(high),
-              low: parseFloat(low),
-              volume: parseFloat(volume),
-              timestamp: Math.floor(parseFloat(timestamp) * 1000)
-            })
-          }
+          if(err)
+            return reject(err.message)
+
+          let { last_price, ask, bid, high, low, volume, timestamp } = tick
+          resolve({
+            last: parseFloat(last_price),
+            ask: parseFloat(ask),
+            bid: parseFloat(bid),
+            high: parseFloat(high),
+            low: parseFloat(low),
+            volume: parseFloat(volume),
+            timestamp: Math.floor(parseFloat(timestamp) * 1000)
+          })
         })
     })
   }
@@ -71,21 +70,50 @@ class Bitfinex {
     return new Promise((resolve, reject) => {
       pair = _.reduce(Bitfinex.alts, (value, sym, alt) => value.replace(sym, alt), pair)
       pair = pair.replace('_','')
+
       this.bitfinex.orderbook(pair, { limit_asks: count, limit_bids: count },
         (err, depth) => {
-          if(err) {
-            reject(err.message)
-          } else {
-            _.each(depth, (entries, type) => {
-              depth[type] = _.map(entries, entry => {
-                return [
-                  parseFloat(entry.price),
-                  parseFloat(entry.amount)
-                ]
-              })
+          if(err)
+            return reject(err.message)
+          _.each(depth, (entries, type) => {
+            depth[type] = _.map(entries, entry => {
+              return [
+                parseFloat(entry.price),
+                parseFloat(entry.amount)
+              ]
             })
-            resolve(depth)
-          }
+          })
+          resolve(depth)
+        })
+    })
+  }
+
+  trades(pair, options={ limit: 50 }) {
+    return new Promise((resolve, reject) => {
+      pair = _.reduce(Bitfinex.alts, (value, sym, alt) => value.replace(sym, alt), pair)
+      pair = pair.replace('_','')
+
+      let opts = []
+      if(options.ts)
+        opts.push(`timestamp=${options.ts}`)
+      if(options.limit >= 1)
+        opts.push(`limit_trades=${options.limit}`)
+
+      // Hack to add parameters to GET request
+      pair += `?${opts.join('&')}`
+
+      this.bitfinex.trades(pair,
+        (err, trades) => {
+          if(err)
+            return reject(err.message)
+
+          resolve(_.map(trades, t => ({
+            id: t.tid,
+            price: parseFloat(t.price),
+            amount: parseFloat(t.amount),
+            type: t.type,
+            ts: t.timestamp
+          })))
         })
     })
   }
@@ -152,6 +180,67 @@ class Bitfinex {
             reject(`Cannot deposit ${asset}.`)
 
           resolve(response.address)
+        })
+    })
+  }
+
+  myTransactions(currency, options={ limit: 50 }) {
+    return new Promise((resolve, reject) => {
+      currency = _.reduce(Bitfinex.alts, (value, sym, alt) => value.replace(sym, alt), currency)
+
+      this.bitfinex.movements(currency, {
+          since: options.from,
+          until: options.to,
+          limit: options.limit
+        },
+        (err, response) => {
+          if(err)
+            return reject(err.message)
+
+          resolve(_.map(response, tx => ({
+            txid: tx.txid,
+            currency: tx.currency,
+            amount: parseFloat(tx.amount),
+            fee: parseFloat(tx.fee),
+            address: tx.address,
+            type: tx.type.toLowerCase(),
+            status: tx.status.toLowerCase(),
+            ts: parseFloat(tx.timestamp_created)
+          })))
+        })
+    })
+  }
+
+  myTrades(pair, options={}) {
+    return new Promise((resolve, reject) => {
+      pair = _.reduce(Bitfinex.alts, (value, sym, alt) => value.replace(sym, alt), pair)
+      pair = pair.replace('_','')
+
+      _.defaults(options, {
+        from: 0,
+        limit: 50
+      })
+
+      this.bitfinex.past_trades(pair, {
+        timestamp: options.from,
+        until: options.to,
+        limit_trades: options.limit
+      },
+        (err, response) => {
+          if(err)
+            return reject(err.message)
+
+          resolve(_.map(response, trade => ({
+            id: trade.tid,
+            order_id: trade.order_id,
+            pair,
+            amount: parseFloat(trade.amount),
+            price: parseFloat(trade.price),
+            fee_currency: trade.fee_currency,
+            fee: parseFloat(trade.fee_amount),
+            type: trade.type.toLowerCase(),
+            ts: parseFloat(trade.timestamp)
+          })))
         })
     })
   }

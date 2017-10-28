@@ -183,7 +183,7 @@ Returns the depth of available buy and sell orders.
 ###### Arguments
 
 * `pairs` string, array - One or more pairs to fetch the order book for.
-* `depth` number (optional) - How big of an order book to return in each direction. DEFAULT: 50
+* `count` number (optional) - How big of an order book to return in each direction. DEFAULT: 50
 
 ###### Response
 
@@ -205,6 +205,40 @@ Returns the depth of available buy and sell orders.
         ...
       ]
     },
+    ...
+  }
+```
+
+#### trades
+
+Returns historical exchange trades.
+
+```javascript
+  trades(pairs[, options = {}]) {
+  }
+```
+
+###### Arguments
+
+* `pairs` string, array - One or more pairs to fetch trades for.
+* `options` object (optional) - Additional parameters to query trades.
+  * `ts` number - Trades at or after this timestamp.
+  * `limit` number - Maximum number of trades to return. DEFAULT: 50
+
+###### Response
+
+```javascript
+  {
+    'ETH_BTC': [
+      {
+        id: 82176516,
+        price: 0.050773,
+        amount: 0.5,
+        type: 'buy', // or 'sell'
+        ts: 1509176531
+      },
+      ...
+    ],
     ...
   }
 ```
@@ -311,6 +345,77 @@ Return or create a new address to which funds can be deposited.
 
 ```javascript
   "0xae89158b43000e07e76b205b870a1e34653d2668"
+```
+
+#### myTransactions
+
+Return account's historical deposit and withdraw transactions.
+
+```javascript
+  myTransactions(currency[, options]) {
+  }
+```
+
+###### Arguments
+
+* `currency` string - The asset symbol of the address to fetch.
+* `options` object (optional) - Additional options.
+  * `from` number - Tranactions at or after this timestamp.
+  * `to` number - Tranactions at or before this timestamp.
+  * `limit` number - Maximum number of transactions to return. DEFAULT: 50
+
+###### Response
+
+```javascript
+  [
+    {
+      txid: '103d827f36a068934894487ba053da24ed87258835979c7c9d899789998a0d48',
+      currency: 'BTC',
+      amount: 0.0006,
+      fee: 0,
+      address: '1KYQCoWXx8J6D5eaTbBfBfxiAVunc9sYvx',
+      type: 'deposit', // or 'withdraw'
+      status: 'completed', // statuses depend per exchange
+      ts: 1509145189 // when transaction was created
+    },
+    ...
+  ]
+```
+
+#### myTrades
+
+Return account's historical trades.
+
+```javascript
+  myTrades(pair[, options]) {
+  }
+```
+
+###### Arguments
+
+* `pair` string - The pair value of trades to fetch.
+* `options` object (optional) - Additional options.
+  * `from` number - Trades at or after this timestamp.
+  * `to` number - Trades at or before this timestamp.
+  * `limit` number - Maximum number of trades to return. DEFAULT: 50
+
+###### Response
+
+```javascript
+  [
+    {
+      id: 11970839,
+      order_id: 446913929,
+      pair: 'BTC_USD',
+      amount: 1.0,
+      price: 5799.97,
+      fee_currency: 'USD',
+      fee: -14.5,
+      type: 'buy', // or 'sell'
+      ts: 1509180280
+    },
+    ...
+  ]
 ```
 
 ## Donate
