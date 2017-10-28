@@ -352,13 +352,13 @@ Return or create a new address to which funds can be deposited.
 Return account's historical deposit and withdraw transactions.
 
 ```javascript
-  myTransactions(currency[, options]) {
+  myTransactions(asset[, options]) {
   }
 ```
 
 ###### Arguments
 
-* `currency` string - The asset symbol of the address to fetch.
+* `asset` string - The asset symbol of the address to fetch.
 * `options` object (optional) - Additional options.
   * `from` number - Tranactions at or after this timestamp.
   * `to` number - Tranactions at or before this timestamp.
@@ -370,7 +370,7 @@ Return account's historical deposit and withdraw transactions.
   [
     {
       txid: '103d827f36a068934894487ba053da24ed87258835979c7c9d899789998a0d48',
-      currency: 'BTC',
+      asset: 'BTC',
       amount: 0.0006,
       fee: 0,
       address: '1KYQCoWXx8J6D5eaTbBfBfxiAVunc9sYvx',
@@ -385,6 +385,8 @@ Return account's historical deposit and withdraw transactions.
 #### myTrades
 
 Return account's historical trades.
+
+**NOTE**: For **Bittrex**, returns orders not trades.
 
 ```javascript
   myTrades(pair[, options]) {
@@ -408,8 +410,9 @@ Return account's historical trades.
       order_id: 446913929,
       pair: 'BTC_USD',
       amount: 1.0,
+      amount_filled: 1.0, // Bittrex only.
       price: 5799.97,
-      fee_currency: 'USD',
+      fee_asset: 'USD',
       fee: -14.5,
       type: 'buy', // or 'sell'
       ts: 1509180280

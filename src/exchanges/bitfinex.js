@@ -11,12 +11,19 @@ class Bitfinex {
     this.bitfinex = new Api(key, secret)
   }
 
+  static replaceAlt(asset) {
+    return _.reduce(Bitfinex.alts, (value, sym, alt) => value.replace(sym, alt), pair)
+  }
+  static fixPair(pair) {
+    return Bitfinex.replaceAlt(pair).replace('_','')
+  }
+
   // Public Methods
 
   ticker(pair) {
     return new Promise((resolve, reject) => {
-      pair = _.reduce(Bitfinex.alts, (value, sym, alt) => value.replace(sym, alt), pair)
-      pair = pair.replace('_','')
+      pair = Bitfinex.fixPair(pair)
+
       this.bitfinex.ticker(pair,
         (err, tick) => {
           if(err)
@@ -68,8 +75,7 @@ class Bitfinex {
 
   depth(pair, count=50) {
     return new Promise((resolve, reject) => {
-      pair = _.reduce(Bitfinex.alts, (value, sym, alt) => value.replace(sym, alt), pair)
-      pair = pair.replace('_','')
+      pair = Bitfinex.fixPair(pair)
 
       this.bitfinex.orderbook(pair, { limit_asks: count, limit_bids: count },
         (err, depth) => {
@@ -88,10 +94,13 @@ class Bitfinex {
     })
   }
 
-  trades(pair, options={ limit: 50 }) {
+  trades(pair, options={}) {
     return new Promise((resolve, reject) => {
-      pair = _.reduce(Bitfinex.alts, (value, sym, alt) => value.replace(sym, alt), pair)
-      pair = pair.replace('_','')
+      pair = Bitfinex.fixPair(pair)
+
+      _.defaults(options, {
+        limit: 50
+      })
 
       let opts = []
       if(options.ts)
@@ -169,7 +178,8 @@ class Bitfinex {
 
   address(asset, opts) {
     return new Promise((resolve, reject) => {
-      asset = _.reduce(Bitfinex.alts, (value, sym, alt) => value.replace(sym, alt), asset)
+      asset = Bitfinex.replaceAlt(asset)
+
       let method = Bitfinex.methods[asset]
       if(!method)
         return reject(`Cannot deposit ${asset}.`)
@@ -184,11 +194,11 @@ class Bitfinex {
     })
   }
 
-  myTransactions(currency, options={ limit: 50 }) {
+  myTransactions(asset, options={ limit: 50 }) {
     return new Promise((resolve, reject) => {
-      currency = _.reduce(Bitfinex.alts, (value, sym, alt) => value.replace(sym, alt), currency)
+      asset = Bitfinex.replaceAlt(asset)
 
-      this.bitfinex.movements(currency, {
+      this.bitfinex.movements(asset, {
           since: options.from,
           until: options.to,
           limit: options.limit
@@ -199,7 +209,7 @@ class Bitfinex {
 
           resolve(_.map(response, tx => ({
             txid: tx.txid,
-            currency: tx.currency,
+            asset: tx.currency,
             amount: parseFloat(tx.amount),
             fee: parseFloat(tx.fee),
             address: tx.address,
@@ -213,8 +223,7 @@ class Bitfinex {
 
   myTrades(pair, options={}) {
     return new Promise((resolve, reject) => {
-      pair = _.reduce(Bitfinex.alts, (value, sym, alt) => value.replace(sym, alt), pair)
-      pair = pair.replace('_','')
+      pair = Bitfinex.fixPair(pair)
 
       _.defaults(options, {
         from: 0,
@@ -236,7 +245,7 @@ class Bitfinex {
             pair,
             amount: parseFloat(trade.amount),
             price: parseFloat(trade.price),
-            fee_currency: trade.fee_currency,
+            fee_asset: trade.fee_currency,
             fee: parseFloat(trade.fee_amount),
             type: trade.type.toLowerCase(),
             ts: parseFloat(trade.timestamp)
@@ -267,17 +276,16 @@ const privateMethods = {
 
   addOrder(type, pair, amount, rate) {
     return new Promise((resolve, reject) => {
-      pair = _.reduce(Bitfinex.alts, (value, sym, alt) => value.replace(sym, alt), pair)
-      pair = pair.replace('_','')
+      pair = Bitfinex.fixPair(pair)
       amount = amount.toString()
       rate = rate.toString()
+
       this.bitfinex.new_order(pair, amount, rate, 'bitfinex', type, 'limit',
         (err, res) => {
-          if(err) {
-            reject(err.message)
-          } else {
-            resolve(res)
-          }
+          if(err)
+            return reject(err.message)
+
+          resolve(res)
         })
     })
   }
