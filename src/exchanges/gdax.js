@@ -12,10 +12,14 @@ class GDAX {
     this.gdax = new Api.AuthenticatedClient(key, secret, passphrase)
   }
 
+  static fixPair(pair) {
+    return pair.replace('_','-')
+  }
+
   // Public Methods
 
   ticker(pair) {
-    pair = pair.replace('_','-')
+    pair = GDAX.fixPair(pair)
     return new Promise((resolve, reject) => {
       let client = new Api.PublicClient(pair)
       client.getProductTicker(

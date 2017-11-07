@@ -12,7 +12,7 @@ class Bitfinex {
   }
 
   static replaceAlt(asset) {
-    return _.reduce(Bitfinex.alts, (value, sym, alt) => value.replace(sym, alt), pair)
+    return _.reduce(Bitfinex.alts, (value, sym, alt) => value.replace(sym, alt), asset)
   }
   static fixPair(pair) {
     return Bitfinex.replaceAlt(pair).replace('_','')

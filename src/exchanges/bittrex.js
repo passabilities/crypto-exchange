@@ -109,12 +109,12 @@ class Bittrex {
     })
   }
 
-  trades(pair, options={}) {
+  trades(pair, opts={}) {
     console.warn('NOTE: Bittrex API v1.1 does not support any filters for market history')
     return new Promise((resolve, reject) => {
       let market = Bittrex.fixPair(pair)
 
-      _.defaults(options, {
+      _.defaults(opts, {
         limit: 50
       })
 
@@ -123,7 +123,7 @@ class Bittrex {
           if(!success)
             return reject(message)
 
-          result = _.take(result, options.limit)
+          result = _.take(result, opts.limit)
 
           resolve(_.map(result, t => ({
             id: t.Id,
@@ -193,7 +193,7 @@ class Bittrex {
     })
   }
 
-  myTransactions(asset, options={ limit: 50 }) {
+  myTransactions(asset, opts={ limit: 50 }) {
     return new Promise((resolve, reject) => {
       let data = { currency: Bittrex.replaceAlt(asset) }
 
@@ -237,12 +237,12 @@ class Bittrex {
 
           let txs = _.concat(withdraws, deposits)
           txs = _.orderBy(txs, ['ts'], ['desc'])
-          if(options.from)
-            txs = _.some(txs, ({ ts }) =>  ts >= options.from)
-          if(options.to)
-            txs = _.some(txs, ({ ts }) =>  ts <= options.to)
-          if(options.limit)
-            txs = _.take(txs, options.limit)
+          if(opts.from)
+            txs = _.some(txs, ({ ts }) =>  ts >= opts.from)
+          if(opts.to)
+            txs = _.some(txs, ({ ts }) =>  ts <= opts.to)
+          if(opts.limit)
+            txs = _.take(txs, opts.limit)
 
           resolve(_.map(txs, tx => ({
             txid: tx.TxId,
@@ -259,7 +259,7 @@ class Bittrex {
     })
   }
 
-  myTrades(pair, options={}) {
+  myTrades(pair, opts={}) {
     console.warn('Bittrex does not provide individual trades. Can only query orders.')
     return new Promise((resolve, reject) => {
       if(!pair)
@@ -267,7 +267,7 @@ class Bittrex {
 
       pair = Bittrex.fixPair(pair)
 
-      _.defaults(options, {
+      _.defaults(opts, {
         limit: 50
       })
 
@@ -288,12 +288,12 @@ class Bittrex {
             ts: new Date(order.TimeStamp).getTime()
           }))
 
-          if(options.from)
-            orders = _.some(orders, ({ ts }) =>  ts >= options.from)
-          if(options.to)
-            orders = _.some(orders, ({ ts }) =>  ts <= options.to)
-          if(options.limit)
-            orders = _.take(orders, options.limit)
+          if(opts.from)
+            orders = _.some(orders, ({ ts }) =>  ts >= opts.from)
+          if(opts.to)
+            orders = _.some(orders, ({ ts }) =>  ts <= opts.to)
+          if(opts.limit)
+            orders = _.take(orders, opts.limit)
 
           resolve(orders)
         })

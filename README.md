@@ -214,14 +214,14 @@ Returns the depth of available buy and sell orders.
 Returns historical exchange trades.
 
 ```javascript
-  trades(pairs[, options = {}]) {
+  trades(pairs[, opts = {}]) {
   }
 ```
 
 ###### Arguments
 
 * `pairs` string, array - One or more pairs to fetch trades for.
-* `options` object (optional) - Additional parameters to query trades.
+* `opts` object (optional) - Additional parameters to query trades.
   * `ts` number - Trades at or after this timestamp.
   * `limit` number - Maximum number of trades to return. DEFAULT: 50
 
@@ -352,14 +352,14 @@ Return or create a new address to which funds can be deposited.
 Return account's historical deposit and withdraw transactions.
 
 ```javascript
-  myTransactions(asset[, options]) {
+  myTransactions(asset[, opts]) {
   }
 ```
 
 ###### Arguments
 
 * `asset` string - The asset symbol of the address to fetch.
-* `options` object (optional) - Additional options.
+* `opts` object (optional) - Additional options.
   * `from` number - Tranactions at or after this timestamp.
   * `to` number - Tranactions at or before this timestamp.
   * `limit` number - Maximum number of transactions to return. DEFAULT: 50
@@ -386,17 +386,17 @@ Return account's historical deposit and withdraw transactions.
 
 Return account's historical trades.
 
-**NOTE**: For **Bittrex**, returns orders not trades.
+***NOTE***: For **Bittrex**, returns orders not trades.
 
 ```javascript
-  myTrades(pair[, options]) {
+  myTrades(pair[, opts]) {
   }
 ```
 
 ###### Arguments
 
 * `pair` string - The pair value of trades to fetch.
-* `options` object (optional) - Additional options.
+* `opts` object (optional) - Additional options.
   * `from` number - Trades at or after this timestamp.
   * `to` number - Trades at or before this timestamp.
   * `limit` number - Maximum number of trades to return. DEFAULT: 50
