@@ -1,3 +1,4 @@
+# v2.3.2
 
 * Need wallet type for Bitfinex balance and adderss fetching.
 
