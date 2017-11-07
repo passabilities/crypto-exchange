@@ -18,7 +18,7 @@ The goal of this project is to be able to interact with a number of different cr
 
 ## Usage
 
-* **NOTE: Pairs are expected to be in the format *BASE_QUOTE***
+* ***NOTE*: Pairs are expected to be in the format *BASE_QUOTE***
 * All methods return a promise with the result passed.
 
 ### Top Level
@@ -262,16 +262,23 @@ Place a buy or sell order on an exchange.
 
 Return current total, available, and pending balances for an exchange.
 
+***NOTE***: **Bitfinex** requires a wallet type to fetch. The underlying method fetches all wallet types on request and will refresh, if called, every 2 minutes to allow immediate subsequent calls.
+
 ```javascript
-  balances() {
+  balances([opts]) {
   }
 ```
+
+###### Arguments
+
+* `opts` object (optional) - Additional options.
+  * `type` string (**Bitfinex**) - Wallet type ('deposit', 'exchange', 'trading').
 
 ###### Response
 
 ```javascript
   {
-    'ETH_BTC': {
+    'BTC': {
       balance: 0.0000,
       available: 0.0000,
       pending: 0.0000
@@ -284,7 +291,9 @@ Return current total, available, and pending balances for an exchange.
 
 Return or create a new address to which funds can be deposited.
 
-***Note:*** Due to how Coinbase and GDAX are intertwined, you must pass aditional authentication in order to interact with outside resources.
+***Note:*** Due to how **Coinbase** and GDAX are intertwined, you must pass aditional authentication in order to interact with outside resources.
+
+***Note:*** **Bitfinex** requires a wallet type.
 
 ```javascript
   address(sym[, opts]) {
@@ -295,7 +304,8 @@ Return or create a new address to which funds can be deposited.
 
 * `sym` string - The asset symbol of the address to fetch.
 * `opts` object (optional) - Additional options.
-  * `auth` object - Secondary API authentication needed for Coinbase.
+  * `auth` object (**Coinbase**) - Secondary API authentication.
+  * `type` string (**Bitfinex**) - Wallet type ('deposit', 'exchange', 'trading').
 
 ###### Response
 

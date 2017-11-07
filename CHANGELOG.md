@@ -1,3 +1,6 @@
+
+* Need wallet type for Bitfinex balance and adderss fetching.
+
 # v2.3.1
 
 * Fix GDAX package to install.
