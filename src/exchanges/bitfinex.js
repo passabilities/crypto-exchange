@@ -105,7 +105,7 @@ class Bitfinex {
       let filterBalances = (balances) => {
         balances = _.filter(balances, ({ type }) => type === opts.type)
         balances = _.reduce(balances, (result, b) => {
-          let asset = b.currency.toUpperCase()
+          let asset = b.currency.toUpperCase(), alt
           asset = (alt = Bitfinex.alts[asset]) ? alt : asset
           let balance = parseFloat(b.amount)
           let available = parseFloat(b.available)
@@ -123,7 +123,7 @@ class Bitfinex {
 
       let now = Date.now()
       if(this.last && now > (this.last + (2 * 60 * 1000))) {
-        resolve(filterBalances(this.balances))
+        resolve(filterBalances(this.bals))
       } else {
         this.bitfinex.wallet_balances(
           (err, balances) => {
@@ -131,7 +131,7 @@ class Bitfinex {
               return reject(err.message)
 
             this.last = Date.now()
-            this.balances = balances
+            this.bals = balances
 
             resolve(filterBalances(balances))
           })
