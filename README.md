@@ -386,7 +386,8 @@ Return account's historical deposit and withdraw transactions.
 
 Return account's historical trades.
 
-***NOTE***: For **Bittrex**, returns orders not trades.
+***NOTE***: **Bittrex** returns orders not individual trades.
+***NOTE***: **Bittrex** trades appear to not be fetching. Investigating.
 
 ```javascript
   myTrades(pair[, opts]) {

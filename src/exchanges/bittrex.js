@@ -198,7 +198,7 @@ class Bittrex {
       let data = { currency: Bittrex.replaceAlt(asset) }
 
       let withdraw = new Promise((resolve, reject) => {
-        this.bittrex.getwithdrawhistory(data,
+        this.bittrex.getwithdrawalhistory(data,
           ({ success, result, message }) => {
             if(!success)
               return reject(message)
@@ -224,8 +224,8 @@ class Bittrex {
           })
       })
 
-      Promise.all(withdraw, deposit)
-        .then(([ withdraws, deposits ]) => {
+      Promise.all([ withdraw, deposit ])
+        .then(([ withdrawals, deposits ]) => {
           let getStatus = tx => {
             if(tx.PendingPayment)
               return 'pending'
@@ -235,7 +235,7 @@ class Bittrex {
             return 'completed'
           }
 
-          let txs = _.concat(withdraws, deposits)
+          let txs = _.concat(withdrawals, deposits)
           txs = _.orderBy(txs, ['ts'], ['desc'])
           if(opts.from)
             txs = _.some(txs, ({ ts }) =>  ts >= opts.from)
@@ -261,6 +261,10 @@ class Bittrex {
 
   myTrades(pair, opts={}) {
     console.warn('Bittrex does not provide individual trades. Can only query orders.')
+    console.warn('Cannot seem to fetch orders from Bittrex. Looking into..')
+
+    // TODO: Figure out why orders are not fetching.
+
     return new Promise((resolve, reject) => {
       if(!pair)
         return reject('No market pair provided.')
