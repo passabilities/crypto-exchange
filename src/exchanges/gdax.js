@@ -2,6 +2,8 @@ const Api = require('gdax')
 const coinbase = require('coinbase')
 const _ = require('lodash')
 
+const Pair = require('../../lib/pair')
+
 /**
  * NOTE: GDAX API returns pairs in "base-quote" order.
  */
@@ -24,49 +26,48 @@ class GDAX {
       let client = new Api.PublicClient(pair)
       client.getProductTicker(
         (err, response, data) => {
-          if(err) {
-            reject(err.message)
-          } else {
-            let { price, ask, bid, volume, time } = data
-            resolve({
-              last: parseFloat(price),
-              ask: parseFloat(ask),
-              bid: parseFloat(bid),
-              high: 'N/A',
-              low: 'N/A',
-              volume: parseFloat(volume),
-              timestamp: new Date(time).getTime()
-            })
-          }
+          if(err)
+            return reject(err.message)
+
+          let { price, ask, bid, volume, time } = data
+          resolve({
+            last: parseFloat(price),
+            ask: parseFloat(ask),
+            bid: parseFloat(bid),
+            high: 'N/A',
+            low: 'N/A',
+            volume: parseFloat(volume),
+            timestamp: new Date(time).getTime()
+          })
         })
     })
   }
 
   assets() {
     return new Promise((resolve, reject) => {
-      this.gdax.getCurrencies((err, response, data) => {
-        if(err) {
-          reject(err.message)
-        } else {
+      this.gdax.getCurrencies(
+        (err, response, data) => {
+          if(err)
+            return reject(err.message)
+
           let assets = _.map(data, 'id')
           resolve(assets)
-        }
-      })
+        })
     })
   }
 
   pairs() {
     return new Promise((resolve, reject) => {
-      this.gdax.getProducts((err, response, data) => {
-        if(err) {
-          reject(err.message)
-        } else {
+      this.gdax.getProducts(
+        (err, response, data) => {
+          if(err)
+            return reject(err.message)
+
           let pairs = _.map(data, (pair) => {
             return pair.id.replace('-','_')
           })
           resolve(pairs)
-        }
-      })
+        })
     })
   }
 
@@ -76,20 +77,44 @@ class GDAX {
       let args = {
         level: 3 // Get full order book
       }
+
       this.gdax.getProductOrderBook(args, pair,
         (err, response, data) => {
-          if(err) {
-            reject(err)
-          } else {
-            let depth = {
-              asks: data.asks.splice(0, count),
-              bids: data.bids.splice(0, count)
-            }
-            _.each(depth, (entries, type) => {
-              depth[type] = _.map(entries, entry => _.map(entry.splice(0,2), parseFloat))
-            })
-            resolve(depth)
+          if(err)
+            return reject(err.message)
+
+          let depth = {
+            asks: data.asks.splice(0, count),
+            bids: data.bids.splice(0, count)
           }
+          _.each(depth, (entries, type) => {
+            depth[type] = _.map(entries, entry => _.map(entry.splice(0,2), parseFloat))
+          })
+          resolve(depth)
+        })
+    })
+  }
+
+  trades(pair, opts={}) {
+    return new Promise((resolve, reject) => {
+      let product = GDAX.fixPair(pair)
+
+      _.defaults(opts, {
+        limit: 50
+      })
+
+      this.gdax.getProductTrades(product, opts,
+        (err, response, data) => {
+          if(err)
+            return reject(err.message)
+
+          resolve(_.map(data, t => ({
+            id: t.trade_id,
+            price: parseFloat(t.price),
+            amount: parseFloat(t.size),
+            type: t.side,
+            ts: new Date(t.time).getTime()
+          })))
         })
     })
   }
@@ -106,10 +131,11 @@ class GDAX {
 
   balances() {
     return new Promise((resolve, reject) => {
-      this.gdax.getAccounts((err, response, data) => {
-        if(err) {
-          reject(err.message)
-        } else {
+      this.gdax.getAccounts(
+        (err, response, data) => {
+          if(err)
+            return reject(err.message)
+
           let balances = _.reduce(data, (result, acct) => {
             result[acct.currency] = {
               balance: parseFloat(acct.balance),
@@ -120,8 +146,7 @@ class GDAX {
             return result
           }, {})
           resolve(balances)
-        }
-      })
+        })
     })
   }
 
@@ -130,10 +155,11 @@ class GDAX {
       if(!cbAuth)
         return reject('Due to how GDAX and Coinbase work, you either pass your Coinbase API keys or use the Coinbase API directly.')
 
-      this.gdax.getCoinbaseAccounts((err, response, data) => {
-        if(err) {
-          reject(err.message)
-        } else {
+      this.gdax.getCoinbaseAccounts(
+        (err, response, data) => {
+          if(err)
+            return reject(err.message)
+
           let account = _.find(data, a => a.type === 'wallet' && a.currency === asset)
           if(!account)
             return reject(`There is no such asset "${asset}".`)
@@ -143,14 +169,57 @@ class GDAX {
           account = new coinbase.model.Account(cb, { id: account.id })
           account.createAddress(null,
             (err, address) => {
-              if(err) {
-                reject(err.message)
-              } else {
-                resolve(address.address)
-              }
+              if(err)
+                return reject(err.message)
+
+              resolve(address.address)
             })
-        }
       })
+    })
+  }
+
+  myTransactions() {
+    return new Promise((resolve, reject) => {
+      console.warn('You will have to use Coinbase to check the deposits and withdrawals.')
+
+      resolve(null)
+    })
+  }
+
+  myTrades(pair, opts={}) {
+    return new Promise((resolve, reject) => {
+      if(!pair)
+        return reject('No market pair provided.')
+
+      _.defaults(opts, {
+        limit: 50,
+        product_id: GDAX.fixPair(pair),
+        status: 'all'
+      })
+
+      this.gdax.getOrders(opts,
+        (err, response, data) => {
+          if(err)
+            return reject(err.message)
+
+          let orders = _.map(data, o => {
+            let amount = o.filled_size
+            let price = o.executed_value / amount
+
+            return {
+              id: o.id,
+              pair,
+              amount,
+              price,
+              fee_asset: Pair.quote(pair), // NOTE: not sure if this is correct
+              fee: parseFloat(o.fill_fees),
+              type: o.side,
+              ts: new Date(o.created_at).getTime()
+            }
+          })
+
+          resolve(orders)
+        })
     })
   }
 
@@ -168,14 +237,14 @@ const privateMethods = {
     }
 
     return new Promise((resolve, reject) => {
-      this.gdax[type](params, (err, response, data) => {
-        if(err) {
-          reject(err.message)
-        } else {
+      this.gdax[type](params,
+        (err, response, data) => {
+          if(err)
+            return reject(err.message)
+
           let txid = data.id
           resolve({txid})
-        }
-      })
+        })
     })
   }
 }
