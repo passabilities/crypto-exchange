@@ -267,7 +267,7 @@ class Bittrex {
 
     return new Promise((resolve, reject) => {
       if(!pair)
-        return reject('No market pair provided.')
+        return reject('No pair provided.')
 
       pair = Bittrex.fixPair(pair)
 
@@ -282,7 +282,7 @@ class Bittrex {
 
           orders = _.map(orders, order => ({
             id: order.OrderUuid,
-            pair: pair,
+            pair,
             amount: parseFloat(order.Quantity),
             amount_filled: parseFloat(order.QuantityRemaining - order.QuantityRemaining),
             price: parseFloat(order.Limit),

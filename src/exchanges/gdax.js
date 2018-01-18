@@ -180,9 +180,7 @@ class GDAX {
 
   myTransactions() {
     return new Promise((resolve, reject) => {
-      console.warn('You will have to use Coinbase to check the deposits and withdrawals.')
-
-      resolve(null)
+      reject('You need to use Coinbase to check deposits and withdrawals.')
     })
   }
 

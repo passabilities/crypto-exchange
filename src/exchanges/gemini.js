@@ -13,10 +13,14 @@ class Gemini {
     this.gemini = new Api({ key, secret, sandbox: false })
   }
 
+  static fixPair(pair) {
+    return pair.replace('_','')
+  }
+
   // Public Methods
 
   ticker(pair) {
-    let exPair = pair.replace('_','')
+    let exPair = Gemini.fixPair(pair)
     return new Promise((resolve, reject) => {
       this.gemini.getTicker(exPair)
         .then( ticker => {
@@ -58,7 +62,7 @@ class Gemini {
   }
 
   depth(pair, count=50) {
-    pair = pair.replace('_','')
+    pair = Gemini.fixPair(pair)
     return new Promise((resolve, reject) => {
       let params = {
         limit_bids: count,
@@ -72,6 +76,28 @@ class Gemini {
           resolve(depth)
         })
         .catch(err => reject(err.message))
+    })
+  }
+
+  trades(pair, opts={}) {
+    return new Promise((resolve, reject) => {
+      pair = Gemini.fixPair(pair)
+
+      _.defaults(opts, {
+        limit: 50
+      })
+      opts.limit_trades = opts.limit
+
+      this.gemini.getTradeHistory(pair, opts)
+        .then( trades => {
+          resolve(_.map(trades, t => ({
+            id: t.tid,
+            price: parseFloat(t.price),
+            amount: parseFloat(t.amount),
+            type: t.type,
+            ts: t.timestampms
+          })))
+        }).catch(e => console.log(e))
     })
   }
 
@@ -118,6 +144,40 @@ class Gemini {
     })
   }
 
+  myTransactions(asset, opts={ limit: 50 }) {
+    return new Promise((resolve, reject) => {
+      reject('This feature is not supproted by Gemini.')
+    })
+  }
+
+  myTrades(pair, opts={}) {
+    return new Promise((resolve, reject) => {
+      if(!pair)
+        return reject('No pair provided.')
+
+      pair = Gemini.fixPair(pair)
+
+      _.defaults(opts, {
+        limit: 50
+      })
+      opts.limit_trades = opts.limit
+
+      this.gemini.getMyPastTrades(pair, opts)
+        .then( trades => {
+          resolve(_.map(trades, t => ({
+            id: t.tid,
+            pair,
+            amount: parseFloat(t.amount),
+            price: parseFloat(t.price),
+            fee_asset: t.fee_currency,
+            fee: parseFloat(t.fee_amount),
+            type: t.type.toLowerCase(),
+            ts: t.timestampms
+          })))
+        })
+    })
+  }
+
 }
 
 module.exports = Gemini
@@ -125,7 +185,7 @@ module.exports = Gemini
 const privateMethods = {
 
   addOrder(type, pair, amount, rate) {
-    pair = pair.replace('_','')
+    pair = Gemini.fixPair(pair)
     return new Promise((resolve, reject) => {
       let params = {
         side: type,
