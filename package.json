@@ -45,6 +45,16 @@
     "node.liqui.io": "^1.1.0",
     "poloniex-api-node": "^1.3.1",
     "prepend-file": "^1.3.1",
-    "yunbi-api-module": "^1.0.4"
+    "yunbi-api-module": "^1.0.4",
+    "request": "^2.81.0",
+    "request-promise": "^4.2.1"
+  },
+  "devDependencies": {
+    "should": "^13.2.1",
+    "mocha": "*"
+  },
+  "scripts": {
+    "start": "node_modules/.bin/supervisor app",
+    "test": "node_modules/.bin/mocha -w"
   }
 }
