@@ -296,7 +296,7 @@ Place a buy or sell order on an exchange.
 
 Return current total, available, and pending balances for an exchange.
 
-***NOTE***: **Bitfinex** requires a wallet type to fetch. The underlying method fetches all wallet types on request and will refresh, if called, every 2 minutes to allow immediate subsequent calls.
+* ***NOTE***: **Bitfinex** requires a wallet type to fetch. The underlying method fetches all wallet types on request and will refresh, if called, every 2 minutes to allow immediate subsequent calls.
 
 ```javascript
   balances([opts]) {
@@ -325,9 +325,8 @@ Return current total, available, and pending balances for an exchange.
 
 Return or create a new address to which funds can be deposited.
 
-***Note:*** Due to how **Coinbase** and GDAX are intertwined, you must pass aditional authentication in order to interact with outside resources.
-
-***Note:*** **Bitfinex** requires a wallet type.
+* ***NOTE:*** Due to how **Coinbase** and GDAX are intertwined, you must pass aditional authentication in order to interact with outside resources.
+* ***NOTE:*** **Bitfinex** requires a wallet type.
 
 ```javascript
   address(sym[, opts]) {
@@ -350,6 +349,8 @@ Return or create a new address to which funds can be deposited.
 #### myTransactions
 
 Return account's historical deposit and withdraw transactions.
+
+* ***NOTE:*** Not supported by GDAX, or Gemini.
 
 ```javascript
   myTransactions(asset[, opts]) {
@@ -386,8 +387,8 @@ Return account's historical deposit and withdraw transactions.
 
 Return account's historical trades.
 
-***NOTE***: **Bittrex** returns orders not individual trades.
-***NOTE***: **Bittrex** trades appear to not be fetching. Investigating.
+* ***NOTE***: **Bittrex** returns orders not individual trades.
+* ***NOTE***: **Bittrex** trades appear to not be fetching. Investigating.
 
 ```javascript
   myTrades(pair[, opts]) {
