@@ -7,6 +7,7 @@ describe('Test Usage: Exchange List', function () {
       'length',
       'binance',
       'bitfinex',
+      'bitstamp',
       'bittrex',
       'gdax',
       'gemini',
