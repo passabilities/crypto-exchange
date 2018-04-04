@@ -1,3 +1,4 @@
+# v2.4.0
 
 * Exchanges added:
   * Binance
