@@ -1,4 +1,8 @@
-# v2.4.1
+# v2.5.0
+
+* Exchanges added:
+  * Bitstamp
+
 # v2.4.0
 
 * Exchanges added:

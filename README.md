@@ -8,6 +8,7 @@ The goal of this project is to be able to interact with a number of different cr
 
 * Binance
 * Bitfinex
+* Bitstamp
 * Bittrex
 * ~~BTC-e~~ ***shutdown***
 * GDAX
