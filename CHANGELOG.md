@@ -1,3 +1,4 @@
+# v2.5.1
 # v2.5.0
 
 * Exchanges added:
