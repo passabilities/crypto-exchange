@@ -1,5 +1,6 @@
 declare namespace CryptoExchange {
   export type Exchanges = {
+    binance: StandardExchange & PublicMethods
     bitfinex: StandardExchange & PublicMethods
     bittrex: StandardExchange & PublicMethods
     gdax: GdaxExchange & PublicMethods

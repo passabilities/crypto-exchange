@@ -6,6 +6,7 @@ The goal of this project is to be able to interact with a number of different cr
 
 ## Available Exchanges
 
+* Binance
 * Bitfinex
 * Bittrex
 * ~~BTC-e~~ ***shutdown***

@@ -1,3 +1,7 @@
+
+* Exchanges added:
+  * Binance
+
 # v2.3.3
 
 * Hot fix for Bitfinex balances.

@@ -5,13 +5,15 @@ describe('Test Usage: Exchange List', function () {
     const actual_Exchanges = require('..')
     const expected_Exchanges = [
       'length',
+      'binance',
       'bitfinex',
       'bittrex',
       'gdax',
       'gemini',
       'kraken',
       'liqui',
-      'poloniex'
+      'poloniex',
+      // 'yunbi'
     ]
     Object.getOwnPropertyNames(actual_Exchanges).should.deepEqual(expected_Exchanges);
     done();
