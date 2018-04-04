@@ -48,17 +48,10 @@ class Bitstamp {
 
   pairs() {
     return new Promise((resolve, reject) => {
-      resolve([
-        'BTC_USD',
-        'BTC_EUR',
-        'EUR_USD',
-        'XRP_USD',
-        'XRP_EUR',
-        'XRP_BTC',
-        'LTC_USD',
-        'LTC_EUR',
-        'LTC_BTC'
-      ])
+      this.bitstamp._get(null, 'v2/trading-pairs-info',
+        (err, response) => {
+          resolve(_.map(response, ({ name }) => name.replace('/','_')))
+        })
     })
   }
 
