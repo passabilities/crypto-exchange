@@ -138,8 +138,8 @@ const privateMethods = {
     return new Promise((resolve, reject) => {
       this.binance.order(data)
         .then(response => {
-          let {orderId} = response
-          resolve({orderId})
+          const txid = response.orderId
+          resolve({txid})
         })
         .catch(err => reject(err.message))
     })
