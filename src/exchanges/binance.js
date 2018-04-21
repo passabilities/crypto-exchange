@@ -18,7 +18,7 @@ class Binance {
     return new Promise((resolve, reject) => {
       this.binance.dailyStats({ symbol })
         .then(ticker => {
-          let { lastPrice, askPirec, bidPrice, highPrice, lowPrice, volume } = ticker
+          let { lastPrice, askPrice, bidPrice, highPrice, lowPrice, volume } = ticker
           resolve({
             last: parseFloat(lastPrice),
             ask: parseFloat(askPrice),
