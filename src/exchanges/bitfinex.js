@@ -103,8 +103,10 @@ class Bitfinex {
   balances(opts) {
     return new Promise((resolve, reject) => {
       let filterBalances = (balances) => {
-        balances = _.filter(balances, ({ type }) => type === opts.type)
-        balances = _.reduce(balances, (result, b) => {
+		if (opts && opts.type) {
+        	balances = _.filter(balances, ({ type }) => type === opts.type)
+		}
+		balances = _.reduce(balances, (result, b) => {
           let asset = b.currency.toUpperCase(), alt
           asset = (alt = Bitfinex.alts[asset]) ? alt : asset
           let balance = parseFloat(b.amount)
