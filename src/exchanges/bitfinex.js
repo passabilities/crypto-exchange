@@ -182,7 +182,9 @@ const privateMethods = {
       pair = pair.replace('_','')
       amount = amount.toString()
       rate = rate.toString()
-      this.bitfinex.new_order(pair, amount, rate, 'bitfinex', type, 'limit',
+      // change type from 'limit' to 'exchange limit' in order to avoid 'not enough balance' issue.
+      // Ref: https://bitcointalk.org/index.php?topic=338746.msg22539385#msg22539385
+      this.bitfinex.new_order(pair, amount, rate, 'bitfinex', type, 'exchange limit',
         (err, res) => {
           if(err) {
             reject(err.message)
