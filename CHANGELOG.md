@@ -1,3 +1,6 @@
+# v2.6.0
+* Avoid 'not enough balance' issue.
+
 # v2.5.1
 # v2.5.0
 
