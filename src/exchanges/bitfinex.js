@@ -176,15 +176,16 @@ Bitfinex.methods = {
 
 const privateMethods = {
 
-  addOrder(type, pair, amount, rate) {
+  addOrder(side, pair, amount, rate, type) {
     return new Promise((resolve, reject) => {
       pair = _.reduce(Bitfinex.alts, (value, sym, alt) => value.replace(sym, alt), pair)
       pair = pair.replace('_','')
       amount = amount.toString()
       rate = rate.toString()
-      // change type from 'limit' to 'exchange limit' in order to avoid 'not enough balance' issue.
+      // Allow user to customize type value, e.g. set type to 'exchange limit' to avoid 'balance not enough' issue.
       // Ref: https://bitcointalk.org/index.php?topic=338746.msg22539385#msg22539385
-      this.bitfinex.new_order(pair, amount, rate, 'bitfinex', type, 'exchange limit',
+      type = type || 'limit'
+      this.bitfinex.new_order(pair, amount, rate, 'bitfinex', side, type,
         (err, res) => {
           if(err) {
             reject(err.message)
