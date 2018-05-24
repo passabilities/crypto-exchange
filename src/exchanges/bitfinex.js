@@ -182,7 +182,7 @@ const privateMethods = {
       pair = pair.replace('_','')
       amount = amount.toString()
       rate = rate.toString()
-      type = type || 'exchange market'
+      type = type || 'exchange limit'
       this.bitfinex.new_order(pair, amount, rate, 'bitfinex', side, type,
         (err, res) => {
           if(err) {
