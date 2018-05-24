@@ -127,13 +127,16 @@ class Binance {
 module.exports = Binance
 
 const privateMethods = {
-  addOrder(type, pair, amount, rate) {
+  addOrder(side, pair, amount, rate, type, extra = {}) {
     pair = pair.replace('_', '')
     let data = {
       symbol: pair,
-      side: type.toUpperCase(),
+      side: side.toUpperCase(),
+      type: type || 'LIMIT'
+      timeInForce: 'GTC'
       quantity: amount,
-      price: rate
+      price: rate,
+      ...extra
     }
     return new Promise((resolve, reject) => {
       this.binance.order(data)

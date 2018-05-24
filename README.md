@@ -244,7 +244,7 @@ Example:
 Place a buy or sell order on an exchange.
 
 ```javascript
-  buy(pair, amount[, rate]) {
+  buy(pair, amount[, rate[, type[, extra]]]) {
   }
 ```
 
@@ -253,6 +253,11 @@ Place a buy or sell order on an exchange.
 * `pair` string - A pair value to trade against.
 * `amount` number - Number representing the amount of ***BASE*** to buy/sell.
 * `rate` number (optional) - Pass a specific rate of the pair to execute.
+  * Only optional if exchange API allows "market orders." Must set `type` accordingly.
+* `type` string (optional) - Define type of order to execute.
+  * Not all exchanges allow to change order type (i.e. market orders).
+  * For exchanges that `rate` is required, it will default to a limit order.
+* `extra` object (optional) - Extra parameters that are REQUIRED by the exchange, if applicable.
 
 ###### Response
 

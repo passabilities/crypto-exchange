@@ -113,12 +113,12 @@ module.exports = Bitstamp
 
 const privateMethods = {
 
-  addOrder(type, pair, amount, rate) {
+  addOrder(side, pair, amount, rate) {
     return new Promise((resolve, reject) => {
       pair = pair.replace('_', '')
       amount = amount.toString()
       rate = rate.toString()
-      this.bitstamp[type](pair, amount, rate, null,
+      this.bitstamp[side](pair, amount, rate, null,
         (err, res) => {
           if (err) {
             reject(err.message)

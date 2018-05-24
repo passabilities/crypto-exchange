@@ -124,14 +124,15 @@ module.exports = Gemini
 
 const privateMethods = {
 
-  addOrder(type, pair, amount, rate) {
+  addOrder(side, pair, amount, rate) {
     pair = pair.replace('_','')
     return new Promise((resolve, reject) => {
       let params = {
-        side: type,
+        side: side,
         symbol: pair,
         amount,
-        price: rate
+        price: rate,
+        type: 'exchange limit'
       }
       this.gemini.newOrder(params)
         .then( response => {
