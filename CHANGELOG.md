@@ -1,3 +1,7 @@
+# v3.0.0
+
+* Default to be limit orders.
+
 # v2.6.1
 
 * Allow user to customize order type.
