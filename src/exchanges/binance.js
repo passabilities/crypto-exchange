@@ -132,8 +132,8 @@ const privateMethods = {
     let data = {
       symbol: pair,
       side: side.toUpperCase(),
-      type: type || 'LIMIT'
-      timeInForce: 'GTC'
+      type: type || 'LIMIT',
+      timeInForce: 'GTC',
       quantity: amount,
       price: rate,
       ...extra
