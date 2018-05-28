@@ -1,6 +1,6 @@
 {
   "name": "crypto-exchange",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "Pulls together list of crypto exchanges to interact with their API's in a uniform fashion.",
   "main": "src/index.js",
   "types": "src/index.d.ts",

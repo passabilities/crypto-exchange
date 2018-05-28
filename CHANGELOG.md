@@ -1,3 +1,7 @@
+# v3.0.2
+
+* Typo.
+
 # v3.0.1
 
 * Fix Bitfinex to default to limit order.
