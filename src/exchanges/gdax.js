@@ -158,7 +158,7 @@ const privateMethods = {
 
   addOrder(side, pair, amount, rate) {
     let params = {
-      side
+      side,
       product_id: pair,
       price: rate,
       size: amount
