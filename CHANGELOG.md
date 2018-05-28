@@ -1,4 +1,17 @@
+# v3.0.1
+
+* Fix Bitfinex to default to limit order.
+
+# v3.0.0
+
+* Default to be limit orders.
+
+# v2.6.1
+
+* Allow user to customize order type.
+
 # v2.6.0
+
 * Avoid 'not enough balance' issue.
 
 # v2.5.1

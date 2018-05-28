@@ -169,11 +169,11 @@ Bittrex.alts = {
 
 const privateMethods = {
 
-  addOrder(type, pair, amount, rate) {
+  addOrder(side, pair, amount, rate) {
     pair = _.reduce(Bittrex.alts, (value, sym, alt) => value.replace(sym, alt), pair)
     pair = Pair.flip(pair).replace('_','-')
     return new Promise((resolve, reject) => {
-      this.bittrex[`${type}limit`]({
+      this.bittrex[`${side}limit`]({
         market: pair,
         quantity: amount,
         rate

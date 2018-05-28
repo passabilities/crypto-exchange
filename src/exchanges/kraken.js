@@ -203,15 +203,15 @@ Kraken.alts = {
 
 const privateMethods = {
 
-  addOrder(type, pair, amount, rate, ordertype='limit') {
+  addOrder(side, pair, amount, rate, type='limit') {
     pair = _.reduce(Kraken.alts, (value, sym, alt) => value.replace(sym, alt), pair)
     pair = pair.replace('_', '')
 
     let data = {
       pair,
-      type,
+      type: side,
       price: rate,
-      ordertype,
+      ordertype: type,
       volume: amount
     }
 

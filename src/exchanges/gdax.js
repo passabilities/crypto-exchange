@@ -156,15 +156,16 @@ module.exports = GDAX
 
 const privateMethods = {
 
-  addOrder(type, pair, amount, rate) {
+  addOrder(side, pair, amount, rate) {
     let params = {
-      'product_id': pair,
-      'price': rate,
-      'size': amount
+      side
+      product_id: pair,
+      price: rate,
+      size: amount
     }
 
     return new Promise((resolve, reject) => {
-      this.gdax[type](params, (err, response, data) => {
+      this.gdax.placeOrder(params, (err, response, data) => {
         if(err) {
           reject(err.message)
         } else {

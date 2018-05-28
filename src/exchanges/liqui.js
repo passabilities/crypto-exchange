@@ -125,12 +125,12 @@ Liqui.alts = {
 
 const privateMethods = {
 
-  addOrder(type, pair, amount, rate) {
+  addOrder(side, pair, amount, rate) {
     pair = _.reduce(Liqui.alts, (value, sym, alt) => value.replace(sym, alt), pair)
     pair = pair.toLowerCase()
     return new Promise((resolve, reject) => {
       let params = { pair, rate, amount }
-      this.liqui[type](params)
+      this.liqui[side](params)
         .then( response => {
           resolve(response)
         })

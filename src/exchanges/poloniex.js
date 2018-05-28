@@ -139,10 +139,15 @@ module.exports = Poloniex
 
 const privateMethods = {
 
-  addOrder(type, pair, amount, rate) {
+  addOrder(side, pair, amount, rate, type, extra) {
     pair = Pair.flip(pair)
     return new Promise((resolve, reject) => {
-      this.plnx[type](pair, rate, amount, false, false, false)
+      const {
+        fillOrKill = false,
+        immediateOrCancel = false,
+        postOnly = false
+      } = extra
+      this.plnx[side](pair, rate, amount, fillOrKill, immediateOrCancel, postOnly)
         .then( response => {
           let txid = response.orderNumber
           resolve({
